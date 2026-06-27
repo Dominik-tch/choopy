@@ -27,6 +27,12 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getAllTasks());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTasks(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable Long id, Authentication authentication) {
         String username = authentication.getName();

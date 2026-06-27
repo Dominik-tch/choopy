@@ -1,5 +1,6 @@
 package com.taschion.choopy.service;
 
+import com.taschion.choopy.exception.TaskNotFoundException;
 import com.taschion.choopy.model.Task;
 import com.taschion.choopy.model.User;
 import com.taschion.choopy.repository.TaskRepository;
@@ -19,7 +20,7 @@ public class TaskService {
     public Task createTask(Task task, String username) {
         User owner = userRepository.findByUsername(username).orElseThrow();
         task.setOwner(owner);
-        task.setCompletedBy(null); // Anfangs null, wie gefordert
+        task.setCompletedBy(null);
         return taskRepository.save(task);
     }
 
@@ -28,9 +29,16 @@ public class TaskService {
     }
 
     public Task completeTask(Long taskId, String username) {
-        Task task = taskRepository.findById(taskId).orElseThrow();
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
         User user = userRepository.findByUsername(username).orElseThrow();
         task.setCompletedBy(user);
         return taskRepository.save(task);
+    }
+
+    public void deleteTask(Long taskId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
+        taskRepository.delete(task);
     }
 }
