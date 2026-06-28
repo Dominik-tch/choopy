@@ -27,7 +27,7 @@ public class HouseholdMembershipService {
 
     public HouseholdMembership joinWithCode(String inviteCode, String username) {
         HouseholdMembership membership = HouseholdMembership.builder()
-                .household(householdRepo.findByInviteCode(inviteCode))
+                .household(householdRepo.findByInviteCode(inviteCode).orElseThrow())
                 .member(userRepo.findByUsername(username).orElseThrow())
                 .role("MEMBER")
                 .build();
