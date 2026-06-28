@@ -1,5 +1,9 @@
 package com.taschion.choopy.controller;
 
+import com.taschion.choopy.dto.HouseholdMembershipResponse;
+import com.taschion.choopy.dto.HouseholdRequest;
+import com.taschion.choopy.dto.HouseholdResponse;
+import com.taschion.choopy.dto.TaskResponse;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.Task;
@@ -23,26 +27,23 @@ public class HouseholdController {
     private final HouseholdMembershipService membershipService;
 
     @PostMapping()
-    ResponseEntity<Household> createHousehold(@RequestBody Household household, Authentication authentication) {
+    ResponseEntity<HouseholdResponse> createHousehold(@RequestBody HouseholdRequest household, Authentication authentication) {
         String username = authentication.getName();
         return ResponseEntity.ok(householdService.createHousehold(household, username));
     }
 
     @GetMapping("/{id}/tasks")
-    ResponseEntity<List<Task>> getHouseholdTasks(@PathVariable Long id, Authentication authentication) {
+    ResponseEntity<List<TaskResponse>> getHouseholdTasks(@PathVariable Long id, Authentication authentication) {
         String userName = authentication.getName();
         return ResponseEntity.ok(householdService.getTasksForHousehold(id, userName));
     }
 
     @PostMapping("/join")
-    public ResponseEntity<HouseholdMembership> joinHousehold(
-            @RequestBody Map<String, String> requestBody,
+    public ResponseEntity<HouseholdMembershipResponse> joinHousehold(@RequestBody Map<String, String> requestBody,
             Authentication authentication
     ) {
         String username = authentication.getName();
         String inviteCode = requestBody.get("inviteCode");
-        HouseholdMembership newMembership = membershipService.joinWithCode(inviteCode, username);
-
-        return ResponseEntity.ok(newMembership);
+        return ResponseEntity.ok(membershipService.joinWithCode(inviteCode, username));
     }
 }

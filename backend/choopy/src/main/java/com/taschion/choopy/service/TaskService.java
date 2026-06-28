@@ -1,44 +1,71 @@
 package com.taschion.choopy.service;
 
+import com.taschion.choopy.dto.TaskRequest;
+import com.taschion.choopy.dto.TaskResponse;
 import com.taschion.choopy.exception.TaskNotFoundException;
+import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.Task;
 import com.taschion.choopy.model.User;
+import com.taschion.choopy.repository.HouseholdMembershipRepository;
+import com.taschion.choopy.repository.HouseholdRepository;
 import com.taschion.choopy.repository.TaskRepository;
 import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TaskService {
 
-    private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
+    private final TaskRepository taskRepo;
+    private final UserRepository userRepo;
+    private final HouseholdRepository householdRepo;
+    private final HouseholdMembershipRepository houseMemberRepo;
 
-    public Task createTask(Task task, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
-        task.setCreator(user);
-        task.setCompletedBy(null);
-        return taskRepository.save(task);
+    public TaskResponse createTask(TaskRequest request, String username) {
+        checkMembership(request.householdId(), username);
+        Household household = householdRepo.findById(request.householdId())
+                .orElseThrow(() -> new RuntimeException("Household not found"));
+        User creator = userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Task task =  Task.builder()
+                .title(request.title())
+                .description(request.description())
+                .category(request.category())
+                .duration(request.duration())
+                .points(request.points())
+                .household(household)
+                .creator(creator)
+                .build();
+        Task savedTask = taskRepo.save(task);
+        return TaskResponse.fromEntity(savedTask);
     }
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
+//    public List<Task> getAllTasks() {
+//        return taskRepo.findAll();
+//    }
 
-    public Task completeTask(Long taskId, String username) {
-        Task task = taskRepository.findById(taskId)
+    public TaskResponse completeTask(Long taskId, String username) {
+        Task task = taskRepo.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
-        User user = userRepository.findByUsername(username).orElseThrow();
+        checkMembership(task.getHousehold().getId(), username);
+        User user = userRepo.findByUsername(username).orElseThrow();
         task.setCompletedBy(user);
-        return taskRepository.save(task);
+        Task savedTask = taskRepo.save(task);
+        return TaskResponse.fromEntity(savedTask);
     }
 
     public void deleteTask(Long taskId) {
-        Task task = taskRepository.findById(taskId)
+        Task task = taskRepo.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
-        taskRepository.delete(task);
+        taskRepo.delete(task);
+    }
+
+    private void checkMembership(Long householdId, String username) {
+        boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
+        if (!isMember) {
+            throw new AccessDeniedException("Zugriff verweigert: Du bist kein Mitglied in diesem Haushalt!");
+        }
     }
 }

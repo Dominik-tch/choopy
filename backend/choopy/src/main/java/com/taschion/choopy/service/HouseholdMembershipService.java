@@ -1,5 +1,6 @@
 package com.taschion.choopy.service;
 
+import com.taschion.choopy.dto.HouseholdMembershipResponse;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.User;
@@ -25,12 +26,12 @@ public class HouseholdMembershipService {
         houseMemberRepo.save(membership);
     }
 
-    public HouseholdMembership joinWithCode(String inviteCode, String username) {
+    public HouseholdMembershipResponse joinWithCode(String inviteCode, String username) {
         HouseholdMembership membership = HouseholdMembership.builder()
                 .household(householdRepo.findByInviteCode(inviteCode).orElseThrow())
                 .member(userRepo.findByUsername(username).orElseThrow())
                 .role("MEMBER")
                 .build();
-        return houseMemberRepo.save(membership);
+        return HouseholdMembershipResponse.fromEntity(houseMemberRepo.save(membership));
     }
 }
