@@ -22,8 +22,12 @@ public class Task {
     private Integer points;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "household_id", nullable = false)
+    private Household household;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
+    private User creator;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "completed_by_id")

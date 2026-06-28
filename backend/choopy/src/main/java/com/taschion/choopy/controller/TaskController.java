@@ -33,7 +33,7 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/complete")
+    @PatchMapping("/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable Long id, Authentication authentication) {
         String username = authentication.getName();
         return ResponseEntity.ok(taskService.completeTask(id, username));

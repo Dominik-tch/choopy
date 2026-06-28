@@ -18,8 +18,8 @@ public class TaskService {
     private final UserRepository userRepository;
 
     public Task createTask(Task task, String username) {
-        User owner = userRepository.findByUsername(username).orElseThrow();
-        task.setOwner(owner);
+        User user = userRepository.findByUsername(username).orElseThrow();
+        task.setCreator(user);
         task.setCompletedBy(null);
         return taskRepository.save(task);
     }
