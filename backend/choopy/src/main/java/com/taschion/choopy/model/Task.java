@@ -26,7 +26,7 @@ public class Task {
     private Household household;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id", nullable = false)
+    @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
     @ManyToOne(fetch = FetchType.EAGER)

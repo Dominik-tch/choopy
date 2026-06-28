@@ -29,9 +29,9 @@ public class HouseholdService {
         String inviteCode = InviteCodeGenerator.generate();
         household.setInviteCode(inviteCode);
         User creator = userRepo.findByUsername(username).orElseThrow();
-
+        Household savedHousehold = houseRepo.save(household);
         membershipService.createMembership(household, creator, "ADMIN");
-        return houseRepo.save(household);
+        return savedHousehold;
     }
 
     public List<Task> getTasksForHousehold(Long householdId, String username) {
