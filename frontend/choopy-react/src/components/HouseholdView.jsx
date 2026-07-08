@@ -5,7 +5,7 @@ import "./HouseholdView.css";
 import { apiFetch } from '../utils';
 
 
-export default function() {
+export default function({setView, setHouseholdState}) {
     const [showCreate, setShowCreate] = React.useState(false);
     const [households, setHouseholds] = React.useState([]);
     
@@ -35,14 +35,6 @@ export default function() {
         loadHouseholds();
     }, []);
 
-    async function extractErrorMessage(response, defaultMessage) {
-    try {
-        const errData = await response.json();
-        return errData.message || defaultMessage;
-    } catch (e) {
-        return defaultMessage;
-    }
-}
     async function createHousehold(formData) {
         const data = Object.fromEntries(formData);
 
@@ -63,16 +55,17 @@ export default function() {
         } catch (err) {
             toast.error("Network error. Please try again later.");
         }
+        loadHouseholds();
     }
 
     let householdList = households.map((item) => {
-        return <Household key={item.key} name={item.name} memberCount={item.memberCount} inviteCode={item.inviteCode}/>
+        return <Household key={item.id} setHouseholdState={setHouseholdState} id={item.id} name={item.name} memberCount={item.memberCount} inviteCode={item.inviteCode}/>
     })
 
     return (
         <div className="household-page">
     <section className="household-header">
-        <h1>Create or choose a household:</h1>
+        <h1>Create/Join or choose a household:</h1>
         <button className={`general-btn ${showCreate ? "household-inactive-btn": ""}`} onClick={() => setShowCreate(prev => (!prev))}>+ Create household</button>
     </section>
     {showCreate && <section>

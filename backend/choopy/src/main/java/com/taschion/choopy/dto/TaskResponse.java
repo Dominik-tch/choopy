@@ -11,6 +11,7 @@ public record TaskResponse(
         Integer points,
         Long householdId,
         UserResponse creator,
+        UserResponse assignedTo,
         UserResponse completedBy
 ) {
     public static TaskResponse fromEntity(Task task) {
@@ -23,7 +24,8 @@ public record TaskResponse(
                 task.getPoints(),
                 task.getHousehold().getId(),
                 UserResponse.fromEntity(task.getCreator()),
-                UserResponse.fromEntity(task.getCompletedBy()) // Kann null sein
+                UserResponse.fromEntity(task.getAssignedTo()),
+                UserResponse.fromEntity(task.getCompletedBy())
         );
     }
 }

@@ -6,5 +6,6 @@ public record TaskRequest(
         String category,
         Integer duration,
         Integer points,
+        String assignedTo,
         Long householdId
 ) {}

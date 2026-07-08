@@ -1,9 +1,6 @@
 package com.taschion.choopy.controller;
 
 import com.taschion.choopy.dto.*;
-import com.taschion.choopy.model.Household;
-import com.taschion.choopy.model.HouseholdMembership;
-import com.taschion.choopy.model.Task;
 import com.taschion.choopy.service.HouseholdMembershipService;
 import com.taschion.choopy.service.HouseholdService;
 import com.taschion.choopy.service.TaskService;
@@ -45,6 +42,11 @@ public class HouseholdController {
     public ResponseEntity<List<TaskResponse>> getHouseholdTasks(@PathVariable Long id, Authentication authentication) {
         String userName = authentication.getName();
         return ResponseEntity.ok(householdService.getTasksForHousehold(id, userName));
+    }
+
+    @GetMapping("/{id}/members")
+    public ResponseEntity<List<MemberResponse>> getHouseholdMembers(@PathVariable Long id) {
+        return ResponseEntity.ok(membershipService.getHouseholdMembers(id));
     }
 
     @PostMapping("/join")

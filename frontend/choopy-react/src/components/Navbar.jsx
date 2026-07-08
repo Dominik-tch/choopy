@@ -1,24 +1,31 @@
-import { User, House } from "lucide-react";
 import "./Navbar.css";
 
-export default function Navbar(props) {
+export default function Navbar({ items, viewState, viewHandler, setHouseholdState }) {
     return (
         <nav className="navbar-container">
-            <button
-                className={"navbar-item" + (props.viewState === "house" ? " active" : "")}
-                onClick={() => props.viewHandler("house")}
-            >
-                <House />
-                <small>House</small>
-            </button>
-            
-            <button 
-                className={"navbar-item" + (props.viewState === "profile" ? " active" : "")}
-                onClick={() => props.viewHandler("profile")}
-            >
-                <User />
-                <small>Profile</small>
-            </button>
+            {items.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                    <button
+                        key={item.id}
+                        className={
+                            "navbar-item" +
+                            (viewState === item.id ? " active" : "")
+                        }
+                        onClick={() => {
+                            if (item.id === "home" && setHouseholdState) {
+                                setHouseholdState(null);
+                            } else {
+                                viewHandler(item.id);
+                            }}
+                        }
+                    >
+                        <Icon />
+                        <small>{item.label}</small>
+                    </button>
+                );
+            })}
         </nav>
     );
 }

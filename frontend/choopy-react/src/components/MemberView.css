@@ -1,0 +1,77 @@
+/* =========================================
+   CONTAINER & LAYOUT
+   ========================================= */
+.member-view-container {
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    margin-top: 0;
+}
+
+.member-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Spacing between the member cards */
+}
+
+/* =========================================
+   MEMBER CARD
+   ========================================= */
+.member-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 4px var(--shadow-light);
+    transition: all 0.2s ease;
+}
+
+/* Slight hover effect to make the list feel interactive */
+.member-card:hover {
+    border-color: var(--theme-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px var(--shadow-medium);
+}
+
+.member-username {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* =========================================
+   SCORE BADGE
+   ========================================= */
+.member-score-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-toggle-container); /* Soft gray background */
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+
+.score-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.score-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--theme-primary); /* Uses your Teal color for the score */
+}

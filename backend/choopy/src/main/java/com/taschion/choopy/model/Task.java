@@ -30,6 +30,10 @@ public class Task {
     private User creator;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "assigned_to_id")
+    private User assignedTo;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "completed_by_id")
     private User completedBy;
 }

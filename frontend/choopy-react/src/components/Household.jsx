@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Household(props) {
     return (
-        <div className="household-card">
+        <button className="household-card" onClick={() => props.setHouseholdState(props.id)}>
             <div className="household-card-header">
                 <h3 className="household-name">{props.name}</h3>
                 <span className="member-badge">{props.memberCount} Members</span>
@@ -12,6 +12,6 @@ export default function Household(props) {
                 <span className="invite-label">Invite Code</span>
                 <span className="invite-code">{props.inviteCode}</span>
             </div>
-        </div>
+        </button>
     );
 }

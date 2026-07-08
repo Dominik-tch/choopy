@@ -1,6 +1,7 @@
 package com.taschion.choopy.service;
 
 import com.taschion.choopy.dto.HouseholdMembershipResponse;
+import com.taschion.choopy.dto.MemberResponse;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.User;
@@ -9,6 +10,8 @@ import com.taschion.choopy.repository.HouseholdRepository;
 import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +36,9 @@ public class HouseholdMembershipService {
                 .role("MEMBER")
                 .build();
         return HouseholdMembershipResponse.fromEntity(houseMemberRepo.save(membership));
+    }
+
+    public List<MemberResponse> getHouseholdMembers(Long id) {
+        return houseMemberRepo.findMemberResponsesByHouseholdId(id);
     }
 }

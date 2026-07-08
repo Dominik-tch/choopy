@@ -17,3 +17,12 @@ export async function apiFetch(endpoint, options = {}) {
 
     return response;
 }
+
+export async function extractErrorMessage(response, defaultMessage) {
+        try {
+            const errData = await response.json();
+            return errData.message || defaultMessage;
+        } catch (e) {
+            return defaultMessage;
+        }
+    }

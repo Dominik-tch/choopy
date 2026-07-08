@@ -40,7 +40,6 @@ public class HouseholdService {
     public List<HouseholdResponse> getHouseholds(String username) {
         User user = userRepo.findByUsername(username).orElseThrow();
         List<Household> householdList = houseMemberRepo.findHouseholdsByUserId(user.getId());
-        System.out.println(householdList);
         return householdList.stream()
                 .map(HouseholdResponse::fromEntity)
                 .collect(Collectors.toList());
@@ -60,7 +59,6 @@ public class HouseholdService {
     public List<HouseholdDetailResponse> getHouseholdDetails(String username) {
         User user = userRepo.findByUsername(username).orElseThrow();
         List<Household> householdList = houseMemberRepo.findHouseholdsByUserId(user.getId());
-        System.out.println(householdList);
         return householdList.stream()
                 .map(household -> HouseholdDetailResponse.fromEntity(household, houseMemberRepo.getMemberCount(household.getId())))
                 .collect(Collectors.toList());

@@ -1,7 +1,9 @@
 package com.taschion.choopy.repository;
 
+import com.taschion.choopy.dto.MemberResponse;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
+import com.taschion.choopy.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +26,15 @@ public interface HouseholdMembershipRepository extends JpaRepository<HouseholdMe
         WHERE m.household.id = :householdId
         """)
     int getMemberCount(@Param("householdId") Long householdId);
+
+    @Query("""
+        SELECT new com.taschion.choopy.dto.MemberResponse(
+            m.member.id,
+            m.member.username,
+            m.score
+        )
+        FROM HouseholdMembership m
+        WHERE m.household.id = :householdId
+    """)
+        List<MemberResponse> findMemberResponsesByHouseholdId(@Param("householdId") Long householdId);
 }

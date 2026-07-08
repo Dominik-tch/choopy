@@ -7,15 +7,6 @@ import { apiFetch } from '../utils';
 export default function LoginView({ onSuccess }) {
     const [showLogin, setLoginState] = useState(true);
 
-    async function extractErrorMessage(response, defaultMessage) {
-    try {
-        const errData = await response.json();
-        return errData.message || defaultMessage;
-    } catch (e) {
-        return defaultMessage;
-    }
-}
-
     async function handleLogin(formData) {
         const data = Object.fromEntries(formData);
         //console.log(`Formdata : ${JSON.stringify(data)}`)
