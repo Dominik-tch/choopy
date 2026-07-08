@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import './App.css';
+import { Toaster } from 'react-hot-toast';
 import LoginView from "./components/LoginView";
 import Main from "./components/Main";
+import Header from "./components/Header"
 
 export default function App() {
     // Check localStorage for an existing token on initial load
@@ -19,6 +20,8 @@ export default function App() {
 
     return (
         <>
+            <Toaster position="top-center" reverseOrder={false} />
+            <Header />
             {token ? (
                 <Main onLogout={handleLogout} />
             ) : (

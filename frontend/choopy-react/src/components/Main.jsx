@@ -1,25 +1,18 @@
 import React from 'react';
+import Navbar from './Navbar';
+import ProfileView from './ProfileView';
+import HouseholdView from './HouseholdView';
 
-export default function Main({ onLogout }) {
+export default function Main(props) {
+    const [view, setView] = React.useState("house")
+
     return (
-        <div style={{ padding: '40px', textAlign: 'center', fontFamily: 'system-ui, sans-serif' }}>
-            <h2>Welcome to Choopy!</h2>
-            <p>You have successfully authenticated.</p>
-            <button 
-                onClick={onLogout}
-                style={{
-                    marginTop: '20px',
-                    padding: '12px 24px',
-                    backgroundColor: '#ef4444', // Red for logout
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '999px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                }}
-            >
-                Logout
-            </button>
-        </div>
+        <>
+            <div className="main-content">
+                {view === "house" && <HouseholdView />}
+                {view === "profile" && <ProfileView onLogout={props.onLogout}/>}
+            </div>
+            <Navbar viewState={view} viewHandler={setView}/>
+        </>
     );
 }

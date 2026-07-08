@@ -1,0 +1,60 @@
+/* =========================================
+   THEME VARIABLES
+   ========================================= */
+:root {
+    /* Primary Colors */
+    --theme-primary: #0cb954;
+    --theme-primary-active: #0f9b55;
+    --theme-primary-rgb: 13, 148, 136; /* Used for transparent shadows (focus ring) */
+
+    /* Background Colors */
+    --bg-toggle-container: #f1f5f9;
+    --bg-surface: #ffffff;
+    --bg-input: #f8fafc;
+
+    /* Text Colors */
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --text-on-primary: #ffffff;
+
+    /* Border & Shadow Elements */
+    --border-color: #cbd5e1;
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.2);
+}
+
+body {
+    /* Deine globale Schriftart für die gesamte Website */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Hier kannst du auch gleich deine Standard-Textfarbe setzen, falls du willst */
+    color: var(--text-primary);
+    background-color: var(--bg-surface);
+}
+
+.general-btn {
+    margin-top: 12px;
+    background-color: var(--theme-primary);
+    color: var(--text-on-primary);
+    border: none;
+    border-radius: 999px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.general-btn:active {
+    background-color: var(--theme-primary-active); /* Darker when tapped */
+}
+
+.main-content {
+    /* Height of navbar (72px) + bottom gap (16px) + extra breathing room (12px) = 100px */
+    padding-bottom: 100px;
+    
+    /* Ensure it takes up the full width, following your max-width logic */
+    width: 100%;
+    margin: 0 auto;
+}

@@ -1,10 +1,7 @@
 package com.taschion.choopy.service;
 
-import com.taschion.choopy.dto.HouseholdRequest;
-import com.taschion.choopy.dto.HouseholdResponse;
-import com.taschion.choopy.dto.TaskResponse;
+import com.taschion.choopy.dto.*;
 import com.taschion.choopy.model.Household;
-import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.Task;
 import com.taschion.choopy.model.User;
 import com.taschion.choopy.repository.HouseholdMembershipRepository;
@@ -40,6 +37,15 @@ public class HouseholdService {
         return HouseholdResponse.fromEntity(savedHousehold);
     }
 
+    public List<HouseholdResponse> getHouseholds(String username) {
+        User user = userRepo.findByUsername(username).orElseThrow();
+        List<Household> householdList = houseMemberRepo.findHouseholdsByUserId(user.getId());
+        System.out.println(householdList);
+        return householdList.stream()
+                .map(HouseholdResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     public List<TaskResponse> getTasksForHousehold(Long householdId, String username) {
         boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
         if (!isMember) {
@@ -48,6 +54,15 @@ public class HouseholdService {
         List<Task> tasks = taskRepo.findByHouseholdId(householdId);
         return tasks.stream()
                 .map(TaskResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<HouseholdDetailResponse> getHouseholdDetails(String username) {
+        User user = userRepo.findByUsername(username).orElseThrow();
+        List<Household> householdList = houseMemberRepo.findHouseholdsByUserId(user.getId());
+        System.out.println(householdList);
+        return householdList.stream()
+                .map(household -> HouseholdDetailResponse.fromEntity(household, houseMemberRepo.getMemberCount(household.getId())))
                 .collect(Collectors.toList());
     }
 }

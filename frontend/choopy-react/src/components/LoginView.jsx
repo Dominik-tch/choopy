@@ -1,17 +1,26 @@
 import React, { useState } from "react";
+import toast from 'react-hot-toast';
 import './LoginView.css';
+import { apiFetch } from '../utils';
 
 // Added onSuccess prop to trigger the state change in App.jsx
 export default function LoginView({ onSuccess }) {
     const [showLogin, setLoginState] = useState(true);
-    const [error, setError] = useState(null);
-    console.log("login rendered")
+
+    async function extractErrorMessage(response, defaultMessage) {
+    try {
+        const errData = await response.json();
+        return errData.message || defaultMessage;
+    } catch (e) {
+        return defaultMessage;
+    }
+}
+
     async function handleLogin(formData) {
-        setError(null);
         const data = Object.fromEntries(formData);
-        console.log(`Formdata : ${JSON.stringify(data)}`)
+        //console.log(`Formdata : ${JSON.stringify(data)}`)
         try {
-            const response = await fetch('http://localhost:8080/api/auth/login', {
+            const response = await apiFetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -19,22 +28,23 @@ export default function LoginView({ onSuccess }) {
 
             if (response.ok) {
                 const result = await response.json();
+                toast.success("Logged in successfully!");
                 onSuccess(result.token);
             } else {
-                setError("Invalid username or password.");
+                const backendError = await extractErrorMessage(response, "Invalid username or password.");
+                toast.error(backendError);
             }
         } catch (err) {
-            setError("Network error. Please try again later.");
+            toast.error("Network error. Please try again later.");
         }
     }
 
     async function handleRegister(formData) {
-        setError(null);
         const data = Object.fromEntries(formData);
-        console.log(`Formdata : ${JSON.stringify(data)}`)
+        //console.log(`Formdata : ${JSON.stringify(data)}`)
         
         try {
-            const response = await fetch('http://localhost:8080/api/auth/register', {
+            const response = await apiFetch('/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -42,12 +52,14 @@ export default function LoginView({ onSuccess }) {
 
             if (response.ok) {
                 const result = await response.json();
+                toast.success("Registered successfully!");
                 onSuccess(result.token);
             } else {
-                setError("Registration failed. Username might be taken.");
+                const backendError = await extractErrorMessage(response, "Registration failed.");
+                toast.error(backendError);
             }
         } catch (err) {
-            setError("Network error. Please try again later.");
+            toast.error("Network error. Please try again later.");
         }
     }
 
@@ -64,24 +76,19 @@ export default function LoginView({ onSuccess }) {
                     type="button">Register</button>
             </div>
 
-            {/* Simple error display */}
-            {error && <div style={{ color: '#ef4444', marginBottom: '16px', textAlign: 'center' }}>{error}</div>}
-
             {showLogin ? (
                 <form action={handleLogin}>
                     <div className="input-group">
                         <label htmlFor="login-username">Username</label>
-                        {/* Added name="username" */}
                         <input id="login-username" name="username" type="text" placeholder="max123" required />
                     </div>
 
                     <div className="input-group">
                         <label htmlFor="login-password">Password</label>
-                        {/* Added name="password" */}
                         <input id="login-password" name="password" type="password" placeholder="••••••••" required />
                     </div>
 
-                    <button type="submit" className="submit-btn">
+                    <button type="submit" className="general-btn">
                         Login
                     </button>
                 </form>
@@ -89,31 +96,25 @@ export default function LoginView({ onSuccess }) {
                 <form action={handleRegister}>
                     <div className="input-group">
                         <label htmlFor="reg-username">Username</label>
-                        {/* Added name="username" */}
                         <input id="reg-username" name="username" type="text" placeholder="max123" required />
                     </div>
 
-                    {/* Note: Ensure your Spring backend User model supports fullname/email if you are sending them, 
-                        or remove them from the payload before sending if they aren't mapped. */}
                     <div className="input-group">
                         <label htmlFor="reg-fullname">Full name</label>
-                        {/* Added name="fullname" */}
-                        <input id="reg-fullname" name="fullname" type="text" placeholder="Max Mustermann"/>
+                        <input id="reg-fullname" name="fullname" type="text" placeholder="Max Mustermann" required/>
                     </div>
 
                     <div className="input-group">
                         <label htmlFor="reg-email">Email</label>
-                        {/* Added name="email" */}
-                        <input id="reg-email" name="email" type="email" placeholder="max123@gmail.com"/>
+                        <input id="reg-email" name="email" type="email" placeholder="max123@gmail.com" required/>
                     </div>
 
                     <div className="input-group">
                         <label htmlFor="reg-password">Password</label>
-                        {/* Added name="password" */}
                         <input id="reg-password" name="password" type="password" placeholder="••••••••" required />
                     </div>
 
-                    <button type="submit" className="submit-btn">
+                    <button type="submit" className="general-btn">
                         Register
                     </button>
                 </form>

@@ -1,9 +1,6 @@
 package com.taschion.choopy.controller;
 
-import com.taschion.choopy.dto.HouseholdMembershipResponse;
-import com.taschion.choopy.dto.HouseholdRequest;
-import com.taschion.choopy.dto.HouseholdResponse;
-import com.taschion.choopy.dto.TaskResponse;
+import com.taschion.choopy.dto.*;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.Task;
@@ -27,13 +24,25 @@ public class HouseholdController {
     private final HouseholdMembershipService membershipService;
 
     @PostMapping()
-    ResponseEntity<HouseholdResponse> createHousehold(@RequestBody HouseholdRequest household, Authentication authentication) {
+    public ResponseEntity<HouseholdResponse> createHousehold(@RequestBody HouseholdRequest household, Authentication authentication) {
         String username = authentication.getName();
         return ResponseEntity.ok(householdService.createHousehold(household, username));
     }
 
+    @GetMapping()
+    public ResponseEntity<List<HouseholdResponse>> getHouseholds(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(householdService.getHouseholds(username));
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<List<HouseholdDetailResponse>> getHouseholdDetails(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(householdService.getHouseholdDetails(username));
+    }
+
     @GetMapping("/{id}/tasks")
-    ResponseEntity<List<TaskResponse>> getHouseholdTasks(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<List<TaskResponse>> getHouseholdTasks(@PathVariable Long id, Authentication authentication) {
         String userName = authentication.getName();
         return ResponseEntity.ok(householdService.getTasksForHousehold(id, userName));
     }

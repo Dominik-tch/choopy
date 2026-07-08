@@ -1,0 +1,11 @@
+.profile-container {
+    padding: 24px;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.logout-btn {
+    display: block;
+    margin: 20px auto 0;
+    background-color: #ef4444;
+}
