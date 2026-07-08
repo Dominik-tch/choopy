@@ -29,6 +29,8 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("Household not found"));
         User creator = userRepo.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        User assignee = userRepo.findByUsername(request.assignedTo())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Task task =  Task.builder()
                 .title(request.title())
                 .description(request.description())
@@ -37,6 +39,7 @@ public class TaskService {
                 .points(request.points())
                 .household(household)
                 .creator(creator)
+                .assignedTo(assignee)
                 .build();
         Task savedTask = taskRepo.save(task);
         return TaskResponse.fromEntity(savedTask);
@@ -65,7 +68,7 @@ public class TaskService {
     private void checkMembership(Long householdId, String username) {
         boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
         if (!isMember) {
-            throw new AccessDeniedException("Zugriff verweigert: Du bist kein Mitglied in diesem Haushalt!");
+            throw new AccessDeniedException("Access denied: You are not a member of this household!");
         }
     }
 }

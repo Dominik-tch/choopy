@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import ProfileView from './ProfileView';
 import HouseholdView from './HouseholdView';
 import MemberView from './MemberView';
+import TaskView from './TaskView';
 
 export default function Main(props) {
     const [householdState, setHouseholdState] = React.useState(null)
@@ -57,6 +58,7 @@ export default function Main(props) {
             <>
                 <div className="main-content">
                     {householdView === "members" && <MemberView householdId={householdState}/>}
+                    {householdView === "tasks" && <TaskView householdId={householdState}/>}
                 </div>
                 <Navbar items={householdNavbar}
                         viewState={householdView}

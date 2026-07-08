@@ -1,0 +1,108 @@
+/* =========================================
+   PAGE CONTAINER
+   ========================================= */
+.task-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px;
+    /* Extra padding at the bottom so the fixed navbar doesn't hide content */
+    padding-bottom: 120px; 
+}
+
+/* =========================================
+   HEADER SECTION
+   ========================================= */
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    gap: 16px;
+    flex-wrap: wrap; /* Ensures it doesn't break on very small mobile screens */
+}
+
+.task-header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Specific styling for the 'Cancel' button state */
+.task-inactive-btn {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.task-inactive-btn:hover {
+    background-color: var(--bg-toggle-container);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+/* =========================================
+   CREATE FORM
+   ========================================= */
+/* Match select and textarea to your existing input styles */
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+    font-size: 15px;
+    font-family: inherit; /* Ensures textarea uses the same font as the app */
+    transition: all 0.2s ease;
+}
+
+/* Specific textarea adjustments */
+.input-group textarea {
+    resize: vertical; /* Only allow vertical resizing */
+    min-height: 60px;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+/* Focus states for the new inputs */
+.input-group select:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15); /* Soft teal glow */
+}
+
+/* Form container animation (optional smooth appearance) */
+form {
+    background-color: var(--bg-surface);
+    padding: 10px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px var(--shadow-light);
+    margin-bottom: 16px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   TASK CARDS GRID
+   ========================================= */
+.task-cards {
+    display: grid;
+    /* Makes the task cards responsive: min 300px width, max 1 fraction of space */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}

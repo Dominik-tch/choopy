@@ -1,0 +1,112 @@
+.task-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 4px 6px -1px var(--shadow-light);
+    transition: all 0.2s ease;
+}
+
+.task-card:hover {
+    border-color: var(--theme-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px var(--shadow-medium);
+}
+
+.task-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.task-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.task-category {
+    background-color: var(--bg-toggle-container);
+    color: var(--text-secondary);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.task-description {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.task-meta-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.task-meta-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--bg-input);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.points-badge {
+    color: var(--theme-primary);
+    background-color: rgba(13, 148, 136, 0.1); /* Subtle teal background */
+}
+
+.meta-icon {
+    font-size: 14px;
+}
+
+.task-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.task-assignee {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.assignee-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.assignee-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.complete-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    /* Optional: make the button slightly smaller than standard forms */
+    width: auto; 
+}
