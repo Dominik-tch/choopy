@@ -23,6 +23,10 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     private String username;
 
+    private String fullname;
+
+    private String email;
+
     private String password;
 
     @Override
@@ -32,7 +36,6 @@ public class User implements UserDetails {
     }
 
     @Override
-    @JsonIgnore
     public String getPassword() { return password; }
 
     @Override

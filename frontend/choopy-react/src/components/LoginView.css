@@ -1,0 +1,92 @@
+/* Main container for better padding on mobile */
+.login-container {
+    padding: 24px;
+    max-width: 450px;
+    margin: 0 auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Outer container - iOS style segmented control */
+.toggle-container {
+    display: flex;
+    background-color: #f1f5f9; /* Very soft gray */
+    border-radius: 999px;
+    padding: 4px; /* Leave some space at the edges */
+    margin-bottom: 32px;
+}
+
+.toggle-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 14px 24px; /* Larger click area */
+    font-size: 16px;
+    color: #64748b;
+    font-weight: 600;
+    border-radius: 999px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Active state is now controlled via a CSS class */
+.toggle-btn.active {
+    background-color: #ffffff;
+    color: #0D9488; /* Your teal theme color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* gap is more modern than margin-bottom on individual elements */
+}
+
+/* Container for label + input */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-left: 4px; /* Slightly indented to match the rounded input */
+}
+
+input {
+    border-radius: 16px; /* More modern: slightly more angular than the pill buttons */
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    padding: 14px 16px;
+    font-size: 16px; /* Prevents iOS auto-zoom */
+    color: #0f172a;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #0D9488;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15); /* Soft focus ring */
+}
+
+/* A submit button to complete the form */
+.submit-btn {
+    margin-top: 12px;
+    background-color: #0D9488;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-btn:active {
+    background-color: #0f766e; /* Darker when tapped */
+}
