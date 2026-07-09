@@ -43,7 +43,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.ORACLE_VM_SSH_KEY }}
           script: |
-            mv /home/ubuntu/*.jar /home/ubuntu/backend.jar
+            rm -f /home/ubuntu/backend.jar
+            mv /home/ubuntu/choopy-*.jar /home/ubuntu/backend.jar
             sudo systemctl restart backend
 
       # ----------------- FRONTEND -----------------
