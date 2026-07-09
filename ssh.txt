@@ -1,0 +1,1 @@
+ssh -i Oracle_Mirco_SSH_KEY.key ubuntu@92.5.143.112
