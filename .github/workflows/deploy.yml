@@ -63,9 +63,9 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.ORACLE_VM_SSH_KEY }}
-          source: "frontend/dist/*"
+          source: "frontend/choopy-react/dist/*"
           target: "/home/ubuntu/dist"
-          strip_components: 2
+          strip_components: 3
 
       - name: Set nginx configuration (SSH)
         uses: appleboy/ssh-action@v1.0.3
