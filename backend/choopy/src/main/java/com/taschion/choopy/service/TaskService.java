@@ -2,8 +2,10 @@ package com.taschion.choopy.service;
 
 import com.taschion.choopy.dto.TaskRequest;
 import com.taschion.choopy.dto.TaskResponse;
+import com.taschion.choopy.exception.MembershipNotFoundException;
 import com.taschion.choopy.exception.TaskNotFoundException;
 import com.taschion.choopy.model.Household;
+import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.Task;
 import com.taschion.choopy.model.User;
 import com.taschion.choopy.repository.HouseholdMembershipRepository;
@@ -13,6 +15,7 @@ import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class TaskService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         User assignee = userRepo.findByUsername(request.assignedTo())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        checkMembership(request.householdId(), assignee.getUsername());
         Task task =  Task.builder()
                 .title(request.title())
                 .description(request.description())
@@ -48,16 +52,18 @@ public class TaskService {
 //    public List<Task> getAllTasks() {
 //        return taskRepo.findAll();
 //    }
-
-    public TaskResponse completeTask(Long taskId, String username) {
-        Task task = taskRepo.findById(taskId)
-                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
-        checkMembership(task.getHousehold().getId(), username);
-        User user = userRepo.findByUsername(username).orElseThrow();
-        task.setCompletedBy(user);
-        Task savedTask = taskRepo.save(task);
-        return TaskResponse.fromEntity(savedTask);
-    }
+@Transactional
+public void completeTask(Long taskId, String username) {
+    Task task = taskRepo.findById(taskId)
+            .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
+    checkMembership(task.getHousehold().getId(), username);
+    User user = userRepo.findByUsername(username).orElseThrow();
+    HouseholdMembership membership = houseMemberRepo
+            .findByHousehold_IdAndMember(task.getHousehold().getId(), user)
+            .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
+    membership.setScore(membership.getScore() + task.getPoints());
+    task.setCompletedBy(user);
+}
 
     public void deleteTask(Long taskId) {
         Task task = taskRepo.findById(taskId)

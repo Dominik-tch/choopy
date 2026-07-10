@@ -30,14 +30,14 @@ public class TaskController {
 //    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTasks(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/complete")
-    public ResponseEntity<TaskResponse> completeTask(@PathVariable Long id, Authentication authentication) {
+    public void completeTask(@PathVariable Long id, Authentication authentication) {
         String username = authentication.getName();
-        return ResponseEntity.ok(taskService.completeTask(id, username));
+        taskService.completeTask(id, username);
     }
 }

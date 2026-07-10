@@ -45,13 +45,18 @@ public class HouseholdService {
                 .collect(Collectors.toList());
     }
 
-    public List<TaskResponse> getTasksForHousehold(Long householdId, String username) {
+    public List<TaskResponse> getTasksForHousehold(Long householdId, String username, String status) {
         boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
         if (!isMember) {
             throw new AccessDeniedException("Access denied: You are not a member of this household.");
         }
-        List<Task> tasks = taskRepo.findByHouseholdId(householdId);
-        return tasks.stream()
+        if ("OPEN".equalsIgnoreCase(status)) {
+            return taskRepo.findByHouseholdIdAndCompletedByIsNull(householdId)
+                    .stream()
+                    .map(TaskResponse::fromEntity)
+                    .toList();
+        }
+        return taskRepo.findByHouseholdId(householdId).stream()
                 .map(TaskResponse::fromEntity)
                 .collect(Collectors.toList());
     }

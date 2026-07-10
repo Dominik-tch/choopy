@@ -79,6 +79,7 @@
 .task-card-footer {
     display: flex;
     justify-content: space-between;
+    justify-items: center;
     align-items: center;
     margin-top: 8px;
     padding-top: 16px;
@@ -109,4 +110,51 @@
     font-size: 14px;
     /* Optional: make the button slightly smaller than standard forms */
     width: auto; 
+}
+
+/* =========================================
+   TASK ACTIONS (Footer Buttons)
+   ========================================= */
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px; 
+}
+
+/* Setzt störende Standard-Abstände bei BEIDEN Buttons zurück */
+.complete-btn, .delete-btn {
+    margin: 0 !important; 
+}
+
+/* Der Mülleimer-Button */
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    
+    /* Feste Maße helfen oft bei der perfekten Zentrierung von Icons */
+    height: 36px;
+    width: 36px;
+    padding: 0;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    /* Falls er OPTISCH immer noch 1-2 Pixel zu hoch wirkt, 
+       kannst du ihn hiermit leicht nach unten schubsen: */
+    /* transform: translateY(1px); */
+}
+
+.delete-btn:hover {
+    color: #ef4444; 
+    background-color: rgba(239, 68, 68, 0.1); 
+}
+
+.delete-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4);
 }

@@ -10,8 +10,10 @@ export default function TaskView({ householdId }) {
     const [tasks, setTasks] = React.useState([]);
 
     async function loadTasks() {
+        const params = new URLSearchParams({ status: "OPEN" });
         try {
-            const response = await apiFetch(`/api/households/${householdId}/tasks`, {
+            const url = `/api/households/${householdId}/tasks?${params.toString()}`;
+            const response = await apiFetch(url, {
                 method: 'GET'
             });
 
@@ -63,7 +65,7 @@ export default function TaskView({ householdId }) {
 
     let taskList = tasks.map((task) => {
         return <Task key={task.id} id={task.id} title={task.title} description={task.description} category={task.category}
-                duration={task.duration} points={task.points} assignee={task.assignedTo && task.assignedTo.username}/>
+                duration={task.duration} points={task.points} assignee={task.assignedTo && task.assignedTo.username} taskReload={loadTasks}/>
     });
 
     async function createTask(formData) {

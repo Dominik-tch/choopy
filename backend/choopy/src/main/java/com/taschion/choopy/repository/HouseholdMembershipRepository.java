@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HouseholdMembershipRepository extends JpaRepository<HouseholdMembership, Long> {
     boolean existsByHouseholdIdAndMemberUsername(Long householdId, String username);
@@ -37,4 +38,6 @@ public interface HouseholdMembershipRepository extends JpaRepository<HouseholdMe
         WHERE m.household.id = :householdId
     """)
         List<MemberResponse> findMemberResponsesByHouseholdId(@Param("householdId") Long householdId);
+
+    Optional<HouseholdMembership> findByHousehold_IdAndMember(Long householdId, User member);
 }
