@@ -3,6 +3,8 @@ package com.taschion.choopy.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "tasks")
 @Data
@@ -20,6 +22,7 @@ public class Task {
     private String description;
     private Integer duration;
     private Integer points;
+    private LocalDateTime completionDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "household_id", nullable = false)

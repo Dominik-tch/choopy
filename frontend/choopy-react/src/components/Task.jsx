@@ -7,6 +7,7 @@ import { apiFetch, extractErrorMessage } from '../utils';
 export default function Task(props) {
 
     async function completeTask() {
+        if (!window.confirm("Are you sure you want to complete this task?")) return;
         try {
             const response = await apiFetch(`/api/tasks/${props.id}/complete`, {
                 method: 'PATCH',
@@ -76,12 +77,21 @@ export default function Task(props) {
                     </span>
                 </div>
                 
-                <div className="task-actions">
-                    <button className="general-btn complete-btn" onClick={completeTask}>Complete</button>
-                    <button className="delete-btn" onClick={deleteTask} title="Delete Task">
-                        <Trash2 size={20} />
-                    </button>
-                </div>
+                {props.completionDate ? (
+                    <div className="task-completed-info">
+                        <span className="meta-icon">✅</span>
+                        <span className="completed-date-text">
+                            {new Date(props.completionDate).toLocaleDateString()}
+                        </span>
+                    </div>
+                ) : (
+                    <div className="task-actions">
+                        <button className="general-btn complete-btn" onClick={completeTask}>Complete</button>
+                        <button className="delete-btn" onClick={deleteTask} title="Delete Task">
+                            <Trash2 size={20} />
+                        </button>
+                    </div>
+                )}
 
             </div>
         </article>

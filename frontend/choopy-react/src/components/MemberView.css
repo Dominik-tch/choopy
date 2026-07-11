@@ -75,3 +75,49 @@
     font-weight: 700;
     color: var(--theme-primary); /* Uses your Teal color for the score */
 }
+
+/* =========================================
+   HISTORY VIEW
+   ========================================= */
+.history-view-container {
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.history-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.history-header .page-title {
+    margin: 0;
+}
+
+.back-btn {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: var(--text-primary);
+}
+
+.back-btn:hover {
+    background-color: var(--bg-input);
+    border-color: var(--theme-primary);
+    transform: translateX(-2px); /* Kleine Animation beim Hover */
+}
+
+.history-task-list {
+    display: grid;
+    /* Makes the task cards responsive: min 300px width, max 1 fraction of space */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}

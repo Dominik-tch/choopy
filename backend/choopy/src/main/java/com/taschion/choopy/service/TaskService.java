@@ -14,8 +14,11 @@ import com.taschion.choopy.repository.TaskRepository;
 import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +34,13 @@ public class TaskService {
         Household household = householdRepo.findById(request.householdId())
                 .orElseThrow(() -> new RuntimeException("Household not found"));
         User creator = userRepo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        User assignee = userRepo.findByUsername(request.assignedTo())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        checkMembership(request.householdId(), assignee.getUsername());
+                .orElseThrow(() -> new UsernameNotFoundException("Creator not found"));
+        User assignee = null;
+        if (request.assignedTo() != null && !request.assignedTo().isBlank() && !request.assignedTo().equalsIgnoreCase("None")) {
+            assignee = userRepo.findByUsername(request.assignedTo())
+                    .orElseThrow(() -> new UsernameNotFoundException("Assignee not found"));
+            checkMembership(request.householdId(), assignee.getUsername());
+        }
         Task task =  Task.builder()
                 .title(request.title())
                 .description(request.description())
@@ -63,6 +69,7 @@ public void completeTask(Long taskId, String username) {
             .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
     membership.setScore(membership.getScore() + task.getPoints());
     task.setCompletedBy(user);
+    task.setCompletionDate(LocalDateTime.now());
 }
 
     public void deleteTask(Long taskId) {

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByHouseholdId(Long householdId);
     List<Task> findByHouseholdIdAndCompletedByIsNull(Long householdId);
+    List<Task> findByHouseholdIdAndCompletedByIsNotNullOrderByCompletionDateDesc(Long householdId);
+    List<Task> findByHouseholdIdAndCompletedByIdOrderByCompletionDateDesc(Long householdId, Long completedById);
 }

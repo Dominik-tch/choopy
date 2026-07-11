@@ -14,7 +14,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class HouseholdService {
                 .build();
         User creator = userRepo.findByUsername(username).orElseThrow();
         Household savedHousehold = houseRepo.save(household);
-        membershipService.createMembership(household, creator, "ADMIN");
+        membershipService.createMembership(savedHousehold, creator, "ADMIN");
         return HouseholdResponse.fromEntity(savedHousehold);
     }
 
@@ -42,10 +41,10 @@ public class HouseholdService {
         List<Household> householdList = houseMemberRepo.findHouseholdsByUserId(user.getId());
         return householdList.stream()
                 .map(HouseholdResponse::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public List<TaskResponse> getTasksForHousehold(Long householdId, String username, String status) {
+    public List<TaskResponse> getTasksForHousehold(Long householdId, String username, String status, Long completedByUserId) {
         boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
         if (!isMember) {
             throw new AccessDeniedException("Access denied: You are not a member of this household.");
@@ -55,10 +54,22 @@ public class HouseholdService {
                     .stream()
                     .map(TaskResponse::fromEntity)
                     .toList();
+        } else if (completedByUserId != null) {
+            return taskRepo.findByHouseholdIdAndCompletedByIdOrderByCompletionDateDesc(householdId, completedByUserId)
+                    .stream()
+                    .map(TaskResponse::fromEntity)
+                    .toList();
+
+        } else if ("COMPLETED".equalsIgnoreCase(status)) {
+            return taskRepo.findByHouseholdIdAndCompletedByIsNotNullOrderByCompletionDateDesc(householdId)
+                    .stream()
+                    .map(TaskResponse::fromEntity)
+                    .toList();
+
         }
         return taskRepo.findByHouseholdId(householdId).stream()
                 .map(TaskResponse::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<HouseholdDetailResponse> getHouseholdDetails(String username) {
@@ -66,6 +77,6 @@ public class HouseholdService {
         List<Household> householdList = houseMemberRepo.findHouseholdsByUserId(user.getId());
         return householdList.stream()
                 .map(household -> HouseholdDetailResponse.fromEntity(household, houseMemberRepo.getMemberCount(household.getId())))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

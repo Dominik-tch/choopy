@@ -2,10 +2,10 @@
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    padding: 20px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 2px;
     box-shadow: 0 4px 6px -1px var(--shadow-light);
     transition: all 0.2s ease;
 }
@@ -81,8 +81,8 @@
     justify-content: space-between;
     justify-items: center;
     align-items: center;
-    margin-top: 8px;
-    padding-top: 16px;
+    margin-top: 4px;
+    padding-top: 5px;
     border-top: 1px solid var(--border-color);
 }
 

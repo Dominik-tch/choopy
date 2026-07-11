@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import LoginView from "./components/LoginView";
 import Main from "./components/Main";
@@ -17,6 +17,18 @@ export default function App() {
         localStorage.removeItem('jwt_token');
         setToken(null);
     };
+
+    useEffect(() => {
+        function handleAuthExpired() {
+            handleLogout();
+            Toaster.error("Session expired. Please log in again.");
+        };
+
+        window.addEventListener('auth-expired', handleAuthExpired);
+
+        return () => window.removeEventListener('auth-expired', handleAuthExpired);
+    }, []);
+
 
     return (
         <>

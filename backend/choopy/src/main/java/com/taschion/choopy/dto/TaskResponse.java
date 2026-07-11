@@ -2,6 +2,8 @@ package com.taschion.choopy.dto;
 
 import com.taschion.choopy.model.Task;
 
+import java.time.LocalDateTime;
+
 public record TaskResponse(
         Long id,
         String title,
@@ -9,6 +11,7 @@ public record TaskResponse(
         String category,
         Integer duration,
         Integer points,
+        LocalDateTime completionDate,
         Long householdId,
         UserResponse creator,
         UserResponse assignedTo,
@@ -22,6 +25,7 @@ public record TaskResponse(
                 task.getCategory(),
                 task.getDuration(),
                 task.getPoints(),
+                task.getCompletionDate(),
                 task.getHousehold().getId(),
                 UserResponse.fromEntity(task.getCreator()),
                 UserResponse.fromEntity(task.getAssignedTo()),

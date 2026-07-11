@@ -42,10 +42,11 @@ public class HouseholdController {
     public ResponseEntity<List<TaskResponse>> getHouseholdTasks(
             @PathVariable Long id,
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) Long completedByUserId,
             Authentication authentication
     ) {
         String username = authentication.getName();
-        return ResponseEntity.ok(householdService.getTasksForHousehold(id, username, status));
+        return ResponseEntity.ok(householdService.getTasksForHousehold(id, username, status, completedByUserId));
     }
 
     @GetMapping("/{id}/members")
