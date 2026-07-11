@@ -10,7 +10,7 @@ export async function apiFetch(endpoint, options = {}) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const API_BASE_URL = import.meta.env.DEV ? 'http://192.168.0.211:8080' : '';
+    const API_BASE_URL = import.meta.env.DEV ? 'http://192.168.0.220:8080' : '';
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         ...options,
         headers,

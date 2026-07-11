@@ -1,10 +1,11 @@
 import React from 'react';
-import { User, House, Home, CheckSquare, Settings, Users } from "lucide-react";
+import { User, House, Home, CheckSquare, Settings, Users, ShoppingCart } from "lucide-react";
 import Navbar from './Navbar';
 import ProfileView from './ProfileView';
 import HouseholdView from './HouseholdView';
 import MemberView from './MemberView';
 import TaskView from './TaskView';
+import ShoppingView from './ShoppingView';
 
 export default function Main(props) {
     const [householdState, setHouseholdState] = React.useState(null)
@@ -34,6 +35,11 @@ export default function Main(props) {
         icon: CheckSquare
     },
     {
+        id: "shoppingList",
+        label: "List",
+        icon: ShoppingCart
+    },
+    {
         id: "members",
         label: "Members",
         icon: Users
@@ -58,6 +64,7 @@ export default function Main(props) {
             <>
                 <div className="main-content">
                     {householdView === "members" && <MemberView householdId={householdState}/>}
+                    {householdView === "shoppingList" && <ShoppingView householdId={householdState}/>}
                     {householdView === "tasks" && <TaskView householdId={householdState}/>}
                 </div>
                 <Navbar items={householdNavbar}

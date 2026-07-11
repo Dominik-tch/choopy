@@ -7,7 +7,7 @@ import "./TaskView.css";
 export default function TaskView({ householdId }) {
     const [showCreate, setShowCreate] = React.useState(false);
     const [members, setMembers] = React.useState([]);
-    const [tasks, setTasks] = React.useState([]);
+    const [tasks, setTasks] = React.useState(null);
 
     async function loadTasks() {
         const params = new URLSearchParams({ status: "OPEN" });
@@ -58,6 +58,11 @@ export default function TaskView({ householdId }) {
         loadMembers();
         loadTasks()
     }, [householdId]);
+
+
+    if (tasks === null) {
+        return <div className="profile-container"><p>Loading tasks...</p></div>;
+    }
 
     let memberList = members.map((member) => {
         return <option key={member.id} value={member.username}>{member.username}</option>

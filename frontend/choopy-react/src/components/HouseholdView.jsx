@@ -2,13 +2,13 @@ import React from "react";
 import toast from 'react-hot-toast';
 import Household from "./Household";
 import "./HouseholdView.css";
-import { apiFetch } from '../utils';
+import { apiFetch, extractErrorMessage } from '../utils';
 
 
 export default function({setView, setHouseholdState}) {
     const [showCreate, setShowCreate] = React.useState(false);
     const [showJoin, setShowJoin] = React.useState(false)
-    const [households, setHouseholds] = React.useState([]);
+    const [households, setHouseholds] = React.useState(null);
     
     async function loadHouseholds() {
         try {
@@ -81,10 +81,15 @@ export default function({setView, setHouseholdState}) {
         }
         loadHouseholds();
     }
+    if (households === null) {
+        return <div className="profile-container"><p>Loading households...</p></div>;
+    }
 
     let householdList = households.map((item) => {
         return <Household key={item.id} setHouseholdState={setHouseholdState} id={item.id} name={item.name} memberCount={item.memberCount} inviteCode={item.inviteCode}/>
     })
+
+    
 
     return (
         <div className="household-page">
