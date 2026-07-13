@@ -23,6 +23,8 @@ public class AuthService {
     public Map<String, String> register(User requestUser) {
         var user = User.builder()
                 .username(requestUser.getUsername())
+                .fullname(requestUser.getFullname())
+                .email(requestUser.getEmail())
                 .password(passwordEncoder.encode(requestUser.getPassword()))
                 .build();
         userRepository.save(user);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import toast from 'react-hot-toast';
 import { Trash2, Circle, CheckCircle2, Plus } from "lucide-react";
 import { apiFetch, extractErrorMessage } from '../utils';
@@ -38,7 +38,8 @@ function ShoppingItem({ item, onToggle, onDelete }) {
 export default function ShoppingView({ householdId }) {
     const [items, setItems] = useState([]);
     const [newItemContent, setNewItemContent] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+
+    const inputRef = useRef(null);
 
     async function loadItems() {
         try {
@@ -66,27 +67,32 @@ export default function ShoppingView({ householdId }) {
 
     async function handleAddItem(e) {
         e.preventDefault();
-        if (!newItemContent.trim()) return;
+        
+        const contentToSave = newItemContent.trim();
+        if (!contentToSave) return;
 
-        setIsLoading(true);
+        setNewItemContent(""); 
+        
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
         try {
             const response = await apiFetch('/api/shopping', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ householdId, content: newItemContent.trim() })
+                body: JSON.stringify({ householdId, content: contentToSave })
             });
 
             if (response.ok) {
-                setNewItemContent(""); 
-                loadItems(); 
+                loadItems();
             } else {
                 const backendError = await extractErrorMessage(response, "Failed to add item.");
                 toast.error(backendError);
+                setNewItemContent(contentToSave);
             }
         } catch (err) {
             toast.error("Network error. Please try again later.");
-        } finally {
-            setIsLoading(false);
+            setNewItemContent(contentToSave);
         }
     }
 
@@ -138,19 +144,19 @@ export default function ShoppingView({ householdId }) {
                 </div>
 
                 <form className="shopping-form" onSubmit={handleAddItem}>
-                    <input 
+                    <input
+                        ref={inputRef}
                         type="text" 
                         className="shopping-input"
                         placeholder="Milk"
                         value={newItemContent}
                         onChange={(e) => setNewItemContent(e.target.value)}
                         autoFocus
-                        disabled={isLoading}
                     />
                     <button 
                         type="submit" 
                         className="shopping-add-btn"
-                        disabled={!newItemContent.trim() || isLoading}
+                        disabled={!newItemContent.trim()}
                         title="Add to list"
                     >
                         <Plus size={24} />

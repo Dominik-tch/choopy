@@ -1,5 +1,6 @@
 package com.taschion.choopy.controller;
 
+import com.taschion.choopy.dto.UserRequest;
 import com.taschion.choopy.model.User;
 import com.taschion.choopy.service.AuthService;
 import lombok.RequiredArgsConstructor;
