@@ -24,11 +24,6 @@ public class TaskController {
         return ResponseEntity.ok(taskService.createTask(request, username));
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<Task>> getAllTasks() {
-//        return ResponseEntity.ok(taskService.getAllTasks());
-//    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);

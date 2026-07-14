@@ -1,6 +1,7 @@
 package com.taschion.choopy.repository;
 
 import com.taschion.choopy.dto.MemberResponse;
+import com.taschion.choopy.dto.MemberRoleResponse;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.User;

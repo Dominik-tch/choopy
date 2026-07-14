@@ -54,6 +54,12 @@ public class HouseholdController {
         return ResponseEntity.ok(membershipService.getHouseholdMembers(id));
     }
 
+    @GetMapping("/{id}/role")
+    public ResponseEntity<MemberRoleResponse> getMemberRole(@PathVariable Long id, Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(membershipService.getMemberRole(id, username));
+    }
+
     @PostMapping("/join")
     public ResponseEntity<HouseholdMembershipResponse> joinHousehold(@RequestBody Map<String, String> requestBody,
             Authentication authentication

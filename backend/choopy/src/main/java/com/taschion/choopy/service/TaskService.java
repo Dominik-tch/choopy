@@ -55,27 +55,29 @@ public class TaskService {
         return TaskResponse.fromEntity(savedTask);
     }
 
-//    public List<Task> getAllTasks() {
-//        return taskRepo.findAll();
-//    }
-@Transactional
-public void completeTask(Long taskId, String username) {
-    Task task = taskRepo.findById(taskId)
-            .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
-    checkMembership(task.getHousehold().getId(), username);
-    User user = userRepo.findByUsername(username).orElseThrow();
-    HouseholdMembership membership = houseMemberRepo
-            .findByHousehold_IdAndMember(task.getHousehold().getId(), user)
-            .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
-    membership.setScore(membership.getScore() + task.getPoints());
-    task.setCompletedBy(user);
-    task.setCompletionDate(LocalDateTime.now());
-}
+    @Transactional
+    public void completeTask(Long taskId, String username) {
+        Task task = taskRepo.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
+        checkMembership(task.getHousehold().getId(), username);
+        User user = userRepo.findByUsername(username).orElseThrow();
+        HouseholdMembership membership = houseMemberRepo
+                .findByHousehold_IdAndMember(task.getHousehold().getId(), user)
+                .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
+        membership.setScore(membership.getScore() + task.getPoints());
+        task.setCompletedBy(user);
+        task.setCompletionDate(LocalDateTime.now());
+    }
 
+    @Transactional
     public void deleteTask(Long taskId) {
         Task task = taskRepo.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
         taskRepo.delete(task);
+        HouseholdMembership membership = houseMemberRepo
+                .findByHousehold_IdAndMember(task.getHousehold().getId(), task.getCompletedBy())
+                .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
+        membership.setScore(membership.getScore() - task.getPoints());
     }
 
     private void checkMembership(Long householdId, String username) {

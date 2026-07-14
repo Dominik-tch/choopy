@@ -37,7 +37,14 @@ export default function Task(props) {
 
             if (response.ok) {
                 toast.success("Task deleted.", { id: toastId });
-                props.taskReload()
+                if (props.taskReload) {
+                    props.taskReload();
+                }
+
+                if (props.loadHistoryView) {
+                    console.log("Loading history view for user:", props.completedByUser);
+                    props.loadHistoryView(props.completedByUser.id, props.completedByUser.username);
+                }
             } else {
                 const backendError = await extractErrorMessage(response, "Deleting failed.");
                 toast.error(backendError, { id: toastId });
@@ -78,11 +85,16 @@ export default function Task(props) {
                 </div>
                 
                 {props.completionDate ? (
-                    <div className="task-completed-info">
+                    <div className="task-actions">
                         <span className="meta-icon">✅</span>
                         <span className="completed-date-text">
                             {new Date(props.completionDate).toLocaleDateString()}
                         </span>
+                        {props.role === "ADMIN" && (
+                            <button className="delete-btn" onClick={deleteTask} title="Delete Task">
+                                <Trash2 size={20} />
+                            </button>
+                        )}
                     </div>
                 ) : (
                     <div className="task-actions">

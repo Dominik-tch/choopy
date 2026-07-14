@@ -2,6 +2,7 @@ package com.taschion.choopy.service;
 
 import com.taschion.choopy.dto.HouseholdMembershipResponse;
 import com.taschion.choopy.dto.MemberResponse;
+import com.taschion.choopy.dto.MemberRoleResponse;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.User;
@@ -40,5 +41,10 @@ public class HouseholdMembershipService {
 
     public List<MemberResponse> getHouseholdMembers(Long id) {
         return houseMemberRepo.findMemberResponsesByHouseholdId(id);
+    }
+
+    public MemberRoleResponse getMemberRole(Long id, String memberName) {
+        User member = userRepo.findByUsername(memberName).orElseThrow();
+        return MemberRoleResponse.fromEntity(houseMemberRepo.findByHousehold_IdAndMember(id, member).orElseThrow());
     }
 }

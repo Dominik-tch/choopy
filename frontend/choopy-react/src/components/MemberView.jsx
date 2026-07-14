@@ -21,6 +21,28 @@ export default function MemberView({ householdId }) {
     const [members, setMembers] = React.useState([]);
     const [historyMemberName, setHistoryMemberName] = React.useState(null);
     const [historyTasks, setHistoryTasks] = React.useState([]);
+    const [role, setRole] = React.useState(null);
+
+    async function fetchUserRole() {
+        try {
+            const response = await apiFetch(`/api/households/${householdId}/role`, {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setRole(data.role);
+            } else {
+                const backendError = await extractErrorMessage(
+                    response,
+                    "Failed to fetch user role."
+                );
+                toast.error(backendError);
+            }
+        } catch (err) {
+            toast.error("Network error. Please try again later.");
+        }
+    }
 
     async function loadMembers() {
         try {
@@ -70,6 +92,7 @@ export default function MemberView({ householdId }) {
 
     React.useEffect(() => {
         loadMembers();
+        fetchUserRole();
     }, []);
 
     const memberList = members.map((member) => (
@@ -93,6 +116,9 @@ export default function MemberView({ householdId }) {
             points={task.points}
             assignee={task.assignedTo && task.assignedTo.username}
             completionDate={task.completionDate}
+            role={role}
+            loadHistoryView={loadHistoryView}
+            completedByUser={task.completedBy}
         />
     ));
 
