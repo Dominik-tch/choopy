@@ -1,7 +1,7 @@
 import React from "react";
 import "./Task.css";
 import toast from 'react-hot-toast';
-import { Trash2 } from "lucide-react";
+import { Trash2, Timer, Star, SquareCheckBig } from "lucide-react";
 import { apiFetch, extractErrorMessage } from '../utils';
 
 export default function Task(props) {
@@ -67,11 +67,11 @@ export default function Task(props) {
             
             <div className="task-meta-container">
                 <div className="task-meta-badge">
-                    <span className="meta-icon">⏱️</span>
+                    <span className="meta-icon"><Timer size={20} /></span>
                     <span>{props.duration} min</span>
                 </div>
                 <div className="task-meta-badge points-badge">
-                    <span className="meta-icon">⭐</span>
+                    <span className="meta-icon"><Star size={20} /></span>
                     <span>{props.points} pts</span> 
                 </div>
             </div>
@@ -86,9 +86,9 @@ export default function Task(props) {
                 
                 {props.completionDate ? (
                     <div className="task-actions">
-                        <span className="meta-icon">✅</span>
+                        <span className="meta-icon-check"><SquareCheckBig /></span>
                         <span className="completed-date-text">
-                            {new Date(props.completionDate).toLocaleDateString()}
+                            {new Date(props.completionDate).toLocaleDateString("de-DE")}
                         </span>
                         {props.role === "ADMIN" && (
                             <button className="delete-btn" onClick={deleteTask} title="Delete Task">

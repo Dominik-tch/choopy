@@ -12,6 +12,7 @@ import com.taschion.choopy.util.InviteCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -76,7 +77,32 @@ public class HouseholdService {
         User user = userRepo.findByUsername(username).orElseThrow();
         List<Household> householdList = houseMemberRepo.findHouseholdsByUserId(user.getId());
         return householdList.stream()
-                .map(household -> HouseholdDetailResponse.fromEntity(household, houseMemberRepo.getMemberCount(household.getId())))
+                .map(household -> HouseholdDetailResponse.fromEntity(
+                        household,
+                        houseMemberRepo.getMemberCount(household.getId()),
+                        houseMemberRepo.findByHousehold_IdAndMember(household.getId(), user).orElseThrow().getColor()))
                 .toList();
+    }
+
+    @Transactional
+    public HouseholdResponse updateName(Long householdId, String newName, String username) {
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Household household = houseRepo.findById(householdId)
+                .orElseThrow(() -> new RuntimeException("Household not found"));
+
+//        // 3. Sicherheits- & Rechte-Check: Nur ein ADMIN darf den Namen ändern
+//        String role = houseMemberRepo.findRoleByHouseholdIdAndMemberId(householdId, user.getId())
+//                .orElseThrow(() -> new AccessDeniedException("You are not a member of this household."));
+//
+//        if (!"ADMIN".equalsIgnoreCase(role)) {
+//            throw new AccessDeniedException("Access denied: Only admins can change the household name.");
+//        }
+        household.setName(newName);
+        System.out.println(household);
+        System.out.println(newName);
+        Household updatedHousehold = houseRepo.save(household);
+
+        return HouseholdResponse.fromEntity(updatedHousehold);
     }
 }

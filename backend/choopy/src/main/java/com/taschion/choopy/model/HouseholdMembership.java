@@ -29,6 +29,8 @@ public class HouseholdMembership {
 
     private String role;
 
+    private String color;
+
     @Column(nullable = false)
     @Builder.Default
     private Integer score = 0;

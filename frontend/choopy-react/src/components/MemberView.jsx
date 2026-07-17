@@ -23,6 +23,21 @@ export default function MemberView({ householdId }) {
     const [historyTasks, setHistoryTasks] = React.useState([]);
     const [role, setRole] = React.useState(null);
 
+    React.useEffect(() => {
+        const handlePopState = (event) => {
+        if (historyMemberName) {
+            setHistoryMemberName(null);
+            setHistoryTasks([]);
+        }
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+        window.removeEventListener('popstate', handlePopState);
+        };
+    }, [historyMemberName]);
+
     async function fetchUserRole() {
         try {
             const response = await apiFetch(`/api/households/${householdId}/role`, {
@@ -67,6 +82,7 @@ export default function MemberView({ householdId }) {
 
     async function loadHistoryView(memberId, memberName) {
         setHistoryMemberName(memberName)
+        window.history.pushState({ HistoryViewOpen: true }, '');
 
         const params = new URLSearchParams({ status: "COMPLETED", completedByUserId: memberId });
         try {
@@ -122,6 +138,12 @@ export default function MemberView({ householdId }) {
         />
     ));
 
+    function handleBackButton() {
+        setHistoryMemberName(null);
+        setHistoryTasks([]);
+        window.history.back();
+    }
+
     return (
         <>
             {historyMemberName == null ? (
@@ -134,7 +156,7 @@ export default function MemberView({ householdId }) {
             ) : (
             <div className="history-view-container">
                 <div className="history-header">
-                    <button className="back-btn" onClick={() => setHistoryMemberName(null)}><ArrowLeft size={20}/></button>
+                    <button className="back-btn" onClick={handleBackButton}><ArrowLeft size={20}/></button>
                     <h1 className="page-title">{`${historyMemberName}'s task history:`}</h1>
                 </div>
                 <section className="history-task-list">

@@ -22,6 +22,10 @@ public class UserService {
     public void updateProfile(UserRequest userRequest, String authenticatedUsername) {
         User user = userRepo.findByUsername(authenticatedUsername).orElseThrow();
 
+        if (userRequest.username() != null && !userRequest.username().isBlank()) {
+            user.setUsername(userRequest.username());
+        }
+
         if (userRequest.email() != null && !userRequest.email().isBlank()) {
             user.setEmail(userRequest.email());
         }

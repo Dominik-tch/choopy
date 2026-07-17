@@ -5,7 +5,7 @@ import "./HouseholdView.css";
 import { apiFetch, extractErrorMessage } from '../utils';
 
 
-export default function({setView, setHouseholdState}) {
+export default function({setView, setHouseholdState, setThemeColor}) {
     const [showCreate, setShowCreate] = React.useState(false);
     const [showJoin, setShowJoin] = React.useState(false)
     const [households, setHouseholds] = React.useState(null);
@@ -19,7 +19,7 @@ export default function({setView, setHouseholdState}) {
             if (response.ok) {
                 const data = await response.json();
                 setHouseholds(data);
-                //console.log(`Recived Household List: ${data}`)
+                console.log(`Recived Household List: ${data}`)
             } else {
                 const backendError = await extractErrorMessage(
                     response,
@@ -86,7 +86,15 @@ export default function({setView, setHouseholdState}) {
     }
 
     let householdList = households.map((item) => {
-        return <Household key={item.id} setHouseholdState={setHouseholdState} id={item.id} name={item.name} memberCount={item.memberCount} inviteCode={item.inviteCode}/>
+        return <Household
+                    key={item.id}
+                    setHouseholdState={setHouseholdState}
+                    id={item.id} name={item.name}
+                    memberCount={item.memberCount}
+                    inviteCode={item.inviteCode}
+                    themeColor={item.color}
+                    setThemeColor={setThemeColor}
+                    />
     })
 
     

@@ -1,8 +1,6 @@
 package com.taschion.choopy.service;
 
-import com.taschion.choopy.dto.HouseholdMembershipResponse;
-import com.taschion.choopy.dto.MemberResponse;
-import com.taschion.choopy.dto.MemberRoleResponse;
+import com.taschion.choopy.dto.*;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.User;
@@ -11,6 +9,7 @@ import com.taschion.choopy.repository.HouseholdRepository;
 import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,5 +45,20 @@ public class HouseholdMembershipService {
     public MemberRoleResponse getMemberRole(Long id, String memberName) {
         User member = userRepo.findByUsername(memberName).orElseThrow();
         return MemberRoleResponse.fromEntity(houseMemberRepo.findByHousehold_IdAndMember(id, member).orElseThrow());
+    }
+
+    @Transactional
+    public PreferenceResponse updatePreferences(String username, Long id, PreferenceRequest preferences) {
+        Household household = householdRepo.findById(id).orElseThrow();
+        household.setName(preferences.householdName());
+        HouseholdMembership memberShip = houseMemberRepo.findByHousehold_IdAndMember(id, userRepo.findByUsername(username).orElseThrow()).orElseThrow();
+        memberShip.setColor(preferences.color());
+        return new PreferenceResponse(household.getName(), memberShip.getColor());
+    }
+
+    public PreferenceResponse getPreferences(String username, Long id) {
+        Household household = householdRepo.findById(id).orElseThrow();
+        HouseholdMembership memberShip = houseMemberRepo.findByHousehold_IdAndMember(id, userRepo.findByUsername(username).orElseThrow()).orElseThrow();
+        return new PreferenceResponse(household.getName(), memberShip.getColor());
     }
 }

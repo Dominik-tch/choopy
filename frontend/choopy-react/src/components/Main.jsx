@@ -6,11 +6,24 @@ import HouseholdView from './HouseholdView';
 import MemberView from './MemberView';
 import TaskView from './TaskView';
 import ShoppingView from './ShoppingView';
+import SettingsView from './SettingsView';
 
 export default function Main(props) {
     const [householdState, setHouseholdState] = React.useState(null)
     const [view, setView] = React.useState("house")
     const [householdView, setHouseholdView] = React.useState("tasks")
+    const [themeColor, setThemeColor] = React.useState("#0cb954");
+
+    React.useEffect(() => {
+        document.documentElement.style.setProperty('--theme-primary', themeColor);
+    }, [themeColor]);
+
+    React.useEffect(() => {
+        if (!householdState) {
+            setThemeColor("#0cb954");
+        }
+    }, [householdState]);
+
     const generalNavbar = [
         {
             id: "house",
@@ -56,7 +69,7 @@ export default function Main(props) {
             {!householdState ? (
             <>
                 <div className="main-content">
-                {view === "house" && <HouseholdView setHouseholdState={setHouseholdState}/>}
+                {view === "house" && <HouseholdView setHouseholdState={setHouseholdState} setThemeColor={setThemeColor}/>}
                 {view === "profile" && <ProfileView onLogout={props.onLogout}/>}
                 </div>
                 <Navbar items={generalNavbar} viewState={view} viewHandler={setView}/>
@@ -66,6 +79,7 @@ export default function Main(props) {
                     {householdView === "members" && <MemberView householdId={householdState}/>}
                     {householdView === "shoppingList" && <ShoppingView householdId={householdState}/>}
                     {householdView === "tasks" && <TaskView householdId={householdState}/>}
+                    {householdView === "settings" && <SettingsView householdId={householdState}/>}
                 </div>
                 <Navbar items={householdNavbar}
                         viewState={householdView}

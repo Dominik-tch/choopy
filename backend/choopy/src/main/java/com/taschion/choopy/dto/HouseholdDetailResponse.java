@@ -6,14 +6,16 @@ public record HouseholdDetailResponse(
         Long id,
         String name,
         String inviteCode,
-        int memberCount
+        int memberCount,
+        String color
 ) {
-    public static HouseholdDetailResponse fromEntity(Household household, int memberCount) {
+    public static HouseholdDetailResponse fromEntity(Household household, int memberCount, String color) {
         return new HouseholdDetailResponse(
                 household.getId(),
                 household.getName(),
                 household.getInviteCode(),
-                memberCount
+                memberCount,
+                color
         );
     }
 }

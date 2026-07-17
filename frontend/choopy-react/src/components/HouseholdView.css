@@ -40,10 +40,12 @@
    INDIVIDUAL CARD (Household.jsx)
    ========================================= */
 .household-card {
+    --local-theme: var(--theme-primary);
     font: inherit;
     color: inherit;
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
+    border-left: 6px solid var(--local-theme);
     border-radius: 16px;
     padding: 24px;
     display: flex;
