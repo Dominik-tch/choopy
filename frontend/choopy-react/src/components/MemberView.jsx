@@ -135,6 +135,7 @@ export default function MemberView({ householdId }) {
             role={role}
             loadHistoryView={loadHistoryView}
             completedByUser={task.completedBy}
+            confirmedByUser={task.confirmedBy}
         />
     ));
 

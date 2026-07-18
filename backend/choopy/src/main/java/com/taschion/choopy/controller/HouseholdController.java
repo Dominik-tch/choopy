@@ -32,18 +32,6 @@
             return ResponseEntity.ok(householdService.getHouseholds(username));
         }
 
-        @PatchMapping("/{id}")
-        public ResponseEntity<HouseholdResponse> updateHouseholdName(
-                @PathVariable Long id,
-                @RequestBody Map<String, String> requestBody,
-                Authentication authentication) {
-
-            String username = authentication.getName();
-            String newName = requestBody.get("name");
-
-            return ResponseEntity.ok(householdService.updateName(id, newName, username));
-        }
-
         @GetMapping("{id}/preferences")
         public ResponseEntity<PreferenceResponse> getPreferences(@PathVariable Long id, Authentication authentication) {
             String username = authentication.getName();

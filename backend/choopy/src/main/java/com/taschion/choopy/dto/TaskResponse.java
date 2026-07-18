@@ -15,7 +15,8 @@ public record TaskResponse(
         Long householdId,
         UserResponse creator,
         UserResponse assignedTo,
-        UserResponse completedBy
+        UserResponse completedBy,
+        UserResponse confirmedBy
 ) {
     public static TaskResponse fromEntity(Task task) {
         return new TaskResponse(
@@ -29,7 +30,8 @@ public record TaskResponse(
                 task.getHousehold().getId(),
                 UserResponse.fromEntity(task.getCreator()),
                 UserResponse.fromEntity(task.getAssignedTo()),
-                UserResponse.fromEntity(task.getCompletedBy())
+                UserResponse.fromEntity(task.getCompletedBy()),
+                UserResponse.fromEntity(task.getConfirmedBy())
         );
     }
 }

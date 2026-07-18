@@ -2,7 +2,6 @@ package com.taschion.choopy.controller;
 
 import com.taschion.choopy.dto.TaskRequest;
 import com.taschion.choopy.dto.TaskResponse;
-import com.taschion.choopy.model.Task;
 import com.taschion.choopy.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +30,22 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/complete")
-    public void completeTask(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<Void> completeTask(@PathVariable Long id, Authentication authentication) {
         String username = authentication.getName();
         taskService.completeTask(id, username);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/confirm")
+    public ResponseEntity<Void> confirmTask(@PathVariable Long id, Authentication authentication) {
+        String username = authentication.getName();
+        taskService.confirmTask(id, username);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/to-confirm")
+    public ResponseEntity<List<TaskResponse>> getTasksToConfirm(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(taskService.getTasksToConfirm(username));
     }
 }

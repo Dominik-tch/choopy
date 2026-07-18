@@ -6,6 +6,25 @@ import { apiFetch, extractErrorMessage } from '../utils';
 
 export default function Task(props) {
 
+    async function confirmTask() {
+        if (!window.confirm("Are you sure you want to confirm this task?")) return;
+        try {
+            const response = await apiFetch(`/api/tasks/${props.id}/confirm`, {
+                method: 'PATCH',
+            });
+
+            if (response.ok) {
+                toast.success("Confirmed successfully!");
+                props.taskReload()
+            } else {
+                const backendError = await extractErrorMessage(response, "Confirming failed.");
+                toast.error(backendError);
+            }
+        } catch (err) {
+            toast.error("Network error. Please try again later.");
+        }
+    }
+
     async function completeTask() {
         if (!window.confirm("Are you sure you want to complete this task?")) return;
         try {
@@ -83,6 +102,13 @@ export default function Task(props) {
                         {props.assignee && props.assignee !== "None" ? props.assignee : "Unassigned"}
                     </span>
                 </div>
+
+                {props.confirmedByUser ? <div className="task-assignee">
+                    <span className="assignee-label">Confirmed by:</span>
+                    <span className="assignee-name">
+                        {props.confirmedByUser.username}
+                    </span>
+                </div> : null}
                 
                 {props.completionDate ? (
                     <div className="task-actions">
@@ -98,10 +124,17 @@ export default function Task(props) {
                     </div>
                 ) : (
                     <div className="task-actions">
-                        <button className="general-btn complete-btn" onClick={completeTask}>Complete</button>
-                        <button className="delete-btn" onClick={deleteTask} title="Delete Task">
-                            <Trash2 size={20} />
-                        </button>
+                        {props.confirm ? (
+                            <button className="general-btn complete-btn" onClick={confirmTask}>Confirm</button>
+                        ) : (
+                            <>
+                                <button className="general-btn complete-btn" onClick={completeTask}>Complete</button>
+                                <button className="delete-btn" onClick={deleteTask} title="Delete Task">
+                                    <Trash2 size={20} />
+                                </button>
+                            </>
+                        )}
+                        
                     </div>
                 )}
 

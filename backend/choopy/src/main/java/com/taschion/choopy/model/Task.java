@@ -39,4 +39,8 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "completed_by_id")
     private User completedBy;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "confirmed_by_id")
+    private User confirmedBy;
 }

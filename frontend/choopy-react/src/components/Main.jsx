@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, House, Home, CheckSquare, Settings, Users, ShoppingCart } from "lucide-react";
+import { User, House, Home, CheckSquare, Settings, Users, ShoppingCart, BookCheck } from "lucide-react";
 import Navbar from './Navbar';
 import ProfileView from './ProfileView';
 import HouseholdView from './HouseholdView';
@@ -7,6 +7,7 @@ import MemberView from './MemberView';
 import TaskView from './TaskView';
 import ShoppingView from './ShoppingView';
 import SettingsView from './SettingsView';
+import ConfirmView from './ConfirmView';
 
 export default function Main(props) {
     const [householdState, setHouseholdState] = React.useState(null)
@@ -29,6 +30,11 @@ export default function Main(props) {
             id: "house",
             label: "House",
             icon: House
+        },
+        {
+            id: "confirmations",
+            label: "Confirmations",
+            icon: BookCheck
         },
         {
             id: "profile",
@@ -71,6 +77,7 @@ export default function Main(props) {
                 <div className="main-content">
                 {view === "house" && <HouseholdView setHouseholdState={setHouseholdState} setThemeColor={setThemeColor}/>}
                 {view === "profile" && <ProfileView onLogout={props.onLogout}/>}
+                {view === "confirmations" && <ConfirmView />}
                 </div>
                 <Navbar items={generalNavbar} viewState={view} viewHandler={setView}/>
             </>) : (
