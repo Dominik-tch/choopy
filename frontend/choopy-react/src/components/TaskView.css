@@ -4,7 +4,7 @@
 .task-page {
     max-width: 900px;
     margin: 0 auto;
-    padding: 24px;
+    padding: 10px;
     /* Extra padding at the bottom so the fixed navbar doesn't hide content */
     padding-bottom: 120px; 
 }

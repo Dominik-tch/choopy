@@ -106,9 +106,9 @@
 }
 
 .invite-code {
-    font-family: monospace; /* Looks more like a real code */
+    font-family: monospace;
     font-size: 16px;
     font-weight: 700;
-    color: var(--theme-primary);
+    color: var(--local-theme);
     letter-spacing: 1px;
 }
