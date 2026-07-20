@@ -1,4 +1,4 @@
-import logo from "../assets/Choopy_Logo.png";
+import logo from "../assets/Choopy_Racoon.png";
 import './Header.css';
 
 export default function Header() {

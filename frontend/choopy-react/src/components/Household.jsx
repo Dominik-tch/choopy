@@ -4,7 +4,7 @@ export default function Household(props) {
 
     function handleClick() {
         props.setHouseholdState(props.id);
-        props.setThemeColor(props.themeColor);
+        props.setThemeColor(props.themeColor || "#0cb954");
     }
 
     return (

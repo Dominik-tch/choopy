@@ -1,5 +1,6 @@
 import React from 'react';
 import { User, House, Home, CheckSquare, Settings, Users, ShoppingCart, BookCheck } from "lucide-react";
+import { darken } from "polished";
 import Navbar from './Navbar';
 import ProfileView from './ProfileView';
 import HouseholdView from './HouseholdView';
@@ -17,6 +18,8 @@ export default function Main(props) {
 
     React.useEffect(() => {
         document.documentElement.style.setProperty('--theme-primary', themeColor);
+        document.documentElement.style.setProperty("--theme-primary-active", darken(0.1, themeColor)
+    );
     }, [themeColor]);
 
     React.useEffect(() => {

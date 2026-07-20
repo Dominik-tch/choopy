@@ -59,7 +59,7 @@
 .household-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 15px -3px var(--shadow-medium);
-    border-color: var(--theme-primary);
+    border-color: var(--local-theme);
 }
 
 .household-card-header {
