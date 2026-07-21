@@ -80,4 +80,11 @@
             String inviteCode = requestBody.get("inviteCode");
             return ResponseEntity.ok(membershipService.joinWithCode(inviteCode, username));
         }
+
+        @GetMapping("/{id}/tasks/suggestions")
+        public ResponseEntity<List<TaskResponse>> getTaskSuggestions(@PathVariable Long id, Authentication authentication
+        ) {
+            String username = authentication.getName();
+            return ResponseEntity.ok(householdService.getRecentTaskSuggestions(id, username));
+        }
     }

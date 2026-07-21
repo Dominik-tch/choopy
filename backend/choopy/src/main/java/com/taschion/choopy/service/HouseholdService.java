@@ -10,6 +10,7 @@ import com.taschion.choopy.repository.TaskRepository;
 import com.taschion.choopy.repository.UserRepository;
 import com.taschion.choopy.util.InviteCodeGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +82,17 @@ public class HouseholdService {
                         household,
                         houseMemberRepo.getMemberCount(household.getId()),
                         houseMemberRepo.findByHousehold_IdAndMember(household.getId(), user).orElseThrow().getColor()))
+                .toList();
+    }
+
+    public List<TaskResponse> getRecentTaskSuggestions(Long householdId, String username) {
+        boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
+        if (!isMember) {
+            throw new AccessDeniedException("Access denied: You are not a member of this household.");
+        }
+        List<Task> recentTasks = taskRepo.findRecentDistinctTasks(householdId, PageRequest.of(0, 10));
+        return recentTasks.stream()
+                .map(TaskResponse::fromEntity)
                 .toList();
     }
 }

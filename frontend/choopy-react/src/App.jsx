@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import LoginView from "./components/LoginView";
 import Main from "./components/Main";
 import Header from "./components/Header"
@@ -20,8 +20,13 @@ export default function App() {
 
     useEffect(() => {
         function handleAuthExpired() {
-            handleLogout();
-            Toaster.error("Session expired. Please log in again.");
+            const currentToken = localStorage.getItem('jwt_token');
+            
+            // Only show the error and run logout logic IF they were logged in
+            if (currentToken) {
+                handleLogout();
+                toast.error("Session expired. Please log in again.");
+            }
         };
 
         window.addEventListener('auth-expired', handleAuthExpired);

@@ -17,7 +17,9 @@ export async function apiFetch(endpoint, options = {}) {
     });
 
     if (response.status === 401 || response.status === 403) {
-            window.dispatchEvent(new Event('auth-expired'));
+            setTimeout(() => {
+                window.dispatchEvent(new Event('auth-expired'));
+            }, 0);
         }
 
     return response;

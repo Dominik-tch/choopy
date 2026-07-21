@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from 'react-hot-toast';
 import './LoginView.css';
-import { apiFetch } from '../utils';
+import { apiFetch, extractErrorMessage } from '../utils';
 
 // Added onSuccess prop to trigger the state change in App.jsx
 export default function LoginView({ onSuccess }) {

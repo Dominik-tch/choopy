@@ -2,6 +2,7 @@ package com.taschion.choopy.repository;
 
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.Task;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +28,15 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
           AND t.completedBy.id <> :userId
     """)
     List<Task> findTasksToConfirmByUserId(@Param("userId") Long userId);
+
+    @Query("""
+        SELECT t FROM Task t
+        WHERE t.id IN (
+            SELECT MAX(t2.id) FROM Task t2
+            WHERE t2.household.id = :householdId
+            GROUP BY t2.title
+        )
+        ORDER BY t.id DESC
+    """)
+    List<Task> findRecentDistinctTasks(@Param("householdId") Long householdId, Pageable pageable);
 }
