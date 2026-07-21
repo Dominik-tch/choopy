@@ -128,7 +128,13 @@ export default function Task(props) {
                         {props.confirmedByUser.username}
                     </span>
                 </div> : props.loadHistoryView ? 
-                    <p className="confirm-warning">Not confirmed</p> : null
+                    <p className="confirm-warning">Not confirmed</p> : 
+                    props.completedByUser ? <div className="task-assignee">
+                        <span className="assignee-label">Completed by:</span>
+                        <span className="assignee-name">
+                            {props.completedByUser.username}
+                        </span>
+                    </div> : null
                 }
                 
                 {props.completionDate ? (
