@@ -143,6 +143,7 @@ export default function MemberView({ householdId }) {
         setHistoryMemberName(null);
         setHistoryTasks([]);
         window.history.back();
+        loadMembers();
     }
 
     return (

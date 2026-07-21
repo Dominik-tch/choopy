@@ -36,6 +36,13 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<Void> rejectTask(@PathVariable Long id, Authentication authentication) {
+        String username = authentication.getName();
+        taskService.rejectTask(id, username);
+        return ResponseEntity.noContent().build();
+    }
+
     @PatchMapping("/{id}/confirm")
     public ResponseEntity<Void> confirmTask(@PathVariable Long id, Authentication authentication) {
         String username = authentication.getName();

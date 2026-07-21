@@ -94,6 +94,21 @@ public class TaskService {
     }
 
     @Transactional
+    public void rejectTask(Long taskId, String username) {
+        Task task = taskRepo.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
+        checkMembership(task.getHousehold().getId(), username);
+        if (task.getCompletedBy() == null) {
+            throw new IllegalStateException("Task is not completed yet.");
+        }
+        HouseholdMembership membership = houseMemberRepo
+                .findByHousehold_IdAndMember(task.getHousehold().getId(), task.getCompletedBy())
+                .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
+        membership.setScore(membership.getScore() - task.getPoints());
+        task.setCompletedBy(null);
+    }
+
+    @Transactional
     public void deleteTask(Long taskId) {
         Task task = taskRepo.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
@@ -121,5 +136,6 @@ public class TaskService {
                 .map(TaskResponse::fromEntity)
                 .toList();
     }
+
 
 }

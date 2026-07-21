@@ -37,6 +37,7 @@ public interface HouseholdMembershipRepository extends JpaRepository<HouseholdMe
         )
         FROM HouseholdMembership m
         WHERE m.household.id = :householdId
+        ORDER BY m.score DESC
     """)
         List<MemberResponse> findMemberResponsesByHouseholdId(@Param("householdId") Long householdId);
 

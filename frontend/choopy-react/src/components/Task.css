@@ -122,17 +122,29 @@
     width: auto; 
 }
 
+.reject-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #ef4444;
+    width: auto; 
+}
+
+.confirm-warning {
+    font-size: 14px;
+    color: #ef4444;
+}
+
 /* =========================================
    TASK ACTIONS (Footer Buttons)
    ========================================= */
 .task-actions {
     display: flex;
     align-items: center;
-    gap: 12px; 
+    gap: 4px; 
 }
 
 /* Setzt störende Standard-Abstände bei BEIDEN Buttons zurück */
-.complete-btn, .delete-btn {
+.complete-btn, .delete-btn, .reject-btn {
     margin: 0 !important; 
 }
 

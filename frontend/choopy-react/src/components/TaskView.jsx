@@ -125,6 +125,9 @@ export default function TaskView({ householdId }) {
                                 <option value="Cooking">Cooking</option>
                                 <option value="Laundry">Laundry</option>
                                 <option value="Driving">Driving</option>
+                                <option value="Pets">Driving</option>
+                                <option value="Cleaning">Driving</option>
+                                <option value="Driving">Driving</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>

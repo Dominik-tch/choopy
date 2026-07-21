@@ -25,6 +25,25 @@ export default function Task(props) {
         }
     }
 
+    async function rejectTask() {
+        if (!window.confirm("Are you sure you want to reject this task?")) return;
+        try {
+            const response = await apiFetch(`/api/tasks/${props.id}/reject`, {
+                method: 'PATCH',
+            });
+
+            if (response.ok) {
+                toast.success("Rejected successfully!");
+                props.taskReload()
+            } else {
+                const backendError = await extractErrorMessage(response, "Rejecting failed.");
+                toast.error(backendError);
+            }
+        } catch (err) {
+            toast.error("Network error. Please try again later.");
+        }
+    }
+
     async function completeTask() {
         if (!window.confirm("Are you sure you want to complete this task?")) return;
         try {
@@ -108,7 +127,9 @@ export default function Task(props) {
                     <span className="assignee-name">
                         {props.confirmedByUser.username}
                     </span>
-                </div> : null}
+                </div> : props.loadHistoryView ? 
+                    <p className="confirm-warning">Not confirmed</p> : null
+                }
                 
                 {props.completionDate ? (
                     <div className="task-actions">
@@ -125,7 +146,10 @@ export default function Task(props) {
                 ) : (
                     <div className="task-actions">
                         {props.confirm ? (
-                            <button className="general-btn complete-btn" onClick={confirmTask}>Confirm</button>
+                            <>
+                                <button className="general-btn complete-btn" onClick={confirmTask}>Confirm</button>
+                                <button className="general-btn reject-btn" onClick={rejectTask}>Reject</button>
+                            </>
                         ) : (
                             <>
                                 <button className="general-btn complete-btn" onClick={completeTask}>Complete</button>
