@@ -115,12 +115,12 @@ export default function Task(props) {
             </div>
 
             <div className="task-card-footer">
-                <div className="task-assignee">
+                {!props.completedByUser ? <div className="task-assignee">
                     <span className="assignee-label">Assigned to:</span>
                     <span className="assignee-name">
                         {props.assignee && props.assignee !== "None" ? props.assignee : "Unassigned"}
                     </span>
-                </div>
+                </div>: null}
 
                 {props.confirmedByUser ? <div className="task-assignee">
                     <span className="assignee-label">Confirmed by:</span>
