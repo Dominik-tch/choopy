@@ -3,6 +3,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import LoginView from "./components/LoginView";
 import Main from "./components/Main";
 import Header from "./components/Header"
+import UpdateNotification from "./components/UpdateNotification";
 
 export default function App() {
     // Check localStorage for an existing token on initial load
@@ -39,6 +40,7 @@ export default function App() {
         <>
             <Toaster position="top-center" reverseOrder={false} />
             <Header />
+            <UpdateNotification />
             {token ? (
                 <Main onLogout={handleLogout} />
             ) : (
