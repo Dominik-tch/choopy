@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import toast from 'react-hot-toast';
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { apiFetch, extractErrorMessage } from '../utils';
 import Task from "./Task";
 import "./TaskView.css";
@@ -9,6 +10,8 @@ export default function TaskView({ householdId }) {
     const [members, setMembers] = useState([]);
     const [tasks, setTasks] = useState(null);
     const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false)
+    const [showMore, setShowMore] = useState(false)
 
     const initialFormState = {
         title: "",
@@ -112,6 +115,26 @@ export default function TaskView({ householdId }) {
         }
     }
 
+    function handleCreateClick() {
+        setShowCreate(prev => {
+            const next = !prev;
+            if (!next) {
+                setShowSuggestions(false);
+            }
+            return next;
+        });
+    }
+
+    function handleRecentClick() {
+        setShowSuggestions(prev => {
+            const next = !prev;
+            if (next) {
+                setShowMore(false);
+            }
+            return next;
+        })
+    }
+
     if (tasks === null) {
         return <div className="profile-container"><p>Loading tasks...</p></div>;
     }
@@ -124,32 +147,45 @@ export default function TaskView({ householdId }) {
         <Task key={task.id} id={task.id} title={task.title} description={task.description} category={task.category}
             duration={task.duration} points={task.points} assignee={task.assignedTo && task.assignedTo.username} taskReload={loadTasks} />
     ));
+    
+    let maxSuggestions = showMore ? 50 : 10;
+
+    let suggestionList = suggestions.slice(0, maxSuggestions).map((task) => (
+        <button
+            key={task.id}
+            type="button"
+            className="suggestion-chip"
+            onClick={() => handleSuggestionClick(task)}
+        >
+            {task.title}
+        </button>
+    ));
 
     return (
         <div className="task-page">
             <section className="task-header">
                 <h1>Create or complete a Task:</h1>
                 <button className={`general-btn ${showCreate ? "task-inactive-btn" : ""}`}
-                    onClick={() => setShowCreate(prev => (!prev))}>+ Create task
+                    onClick={handleCreateClick}>+ Create task
+                </button>
+                <button className={`general-btn small-btn ${showSuggestions ? "task-inactive-btn" : ""}`}
+                    onClick={handleRecentClick}>
+                        {showSuggestions ? <ChevronUp size={18} />: <ChevronDown size={18} />}
+                        Recent
                 </button>
             </section>
 
-            {suggestions.length > 0 && (
+            {showSuggestions && (
+                suggestions.length > 0 ? (
                 <div className="task-suggestions-container">
-                    <span className="suggestions-label">Recent:</span>
-                    <div className="task-suggestions-list">
-                        {suggestions.map((task) => (
-                            <button 
-                                key={task.id} 
-                                type="button" 
-                                className="suggestion-chip"
-                                onClick={() => handleSuggestionClick(task)}
-                            >
-                                {task.title}
-                            </button>
-                        ))}
-                    </div>
-                </div>
+                    {suggestionList}
+                    {suggestions.length > maxSuggestions && !showMore && (
+                    <button className={`show-more-btn ${showMore ? "task-inactive-btn" : ""}`}
+                        onClick={() => setShowMore(true)}>
+                            <ChevronDown size={18} />
+                            Show more
+                    </button>)}
+                </div>) : <p>No recent Tasks yet</p>
             )}
 
             {showCreate && <section>

@@ -90,7 +90,7 @@ public class HouseholdService {
         if (!isMember) {
             throw new AccessDeniedException("Access denied: You are not a member of this household.");
         }
-        List<Task> recentTasks = taskRepo.findRecentDistinctTasks(householdId, PageRequest.of(0, 10));
+        List<Task> recentTasks = taskRepo.findRecentDistinctTasks(householdId, PageRequest.of(0, 50));
         return recentTasks.stream()
                 .map(TaskResponse::fromEntity)
                 .toList();

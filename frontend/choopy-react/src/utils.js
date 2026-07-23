@@ -17,10 +17,14 @@ export async function apiFetch(endpoint, options = {}) {
     });
 
     if (response.status === 401 || response.status === 403) {
+        const isLoginOrRegister = endpoint.includes('/api/auth/login') || endpoint.includes('/api/auth/register');
+        
+        if (!isLoginOrRegister) {
             setTimeout(() => {
                 window.dispatchEvent(new Event('auth-expired'));
             }, 0);
         }
+    }
 
     return response;
 }
