@@ -25,7 +25,7 @@ public class TaskSchedulerJobService {
     // Cron: Sekunde, Minute, Stunde, Tag im Monat, Monat, Wochentag
     // "0 0 3 * * *" means: every day at 03:00:00
     @Transactional
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 3 * * *")
     public void generateTasksForToday() {
         String today = LocalDate.now().getDayOfWeek().name();
         log.info("Running daily task generation... Today is: {}", today);
