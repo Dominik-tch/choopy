@@ -57,6 +57,51 @@ public class TaskService {
     }
 
     @Transactional
+    public TaskResponse updateTask(TaskRequest request, Long taskId, String username) {
+        Task task = taskRepo.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
+
+        checkMembership(task.getHousehold().getId(), username);
+
+        if (task.getCompletedBy() != null) {
+            HouseholdMembership membership = houseMemberRepo
+                    .findByHousehold_IdAndMember(task.getHousehold().getId(), task.getCompletedBy())
+                    .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
+            membership.setScore(membership.getScore() - task.getPoints());
+        }
+
+        task.setTitle(request.title());
+        task.setDescription(request.description());
+        task.setCategory(request.category());
+        task.setDuration(request.duration());
+        task.setPoints(request.points());
+
+        if (task.getCompletedBy() != null) {
+            HouseholdMembership membership = houseMemberRepo
+                    .findByHousehold_IdAndMember(task.getHousehold().getId(), task.getCompletedBy())
+                    .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
+            membership.setScore(membership.getScore() + task.getPoints());
+        }
+
+        Task savedTask = taskRepo.save(task);
+        return TaskResponse.fromEntity(savedTask);
+    }
+
+    @Transactional
+    public void deleteTask(Long taskId) {
+        Task task = taskRepo.findById(taskId)
+                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
+
+        if (task.getCompletedBy() != null) {
+            HouseholdMembership membership = houseMemberRepo
+                    .findByHousehold_IdAndMember(task.getHousehold().getId(), task.getCompletedBy())
+                    .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
+            membership.setScore(membership.getScore() - task.getPoints());
+        }
+        taskRepo.delete(task);
+    }
+
+    @Transactional
     public void completeTask(Long taskId, String username) {
         Task task = taskRepo.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
@@ -108,20 +153,6 @@ public class TaskService {
         task.setCompletedBy(null);
     }
 
-    @Transactional
-    public void deleteTask(Long taskId) {
-        Task task = taskRepo.findById(taskId)
-                .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
-
-        if (task.getCompletedBy() != null) {
-            HouseholdMembership membership = houseMemberRepo
-                    .findByHousehold_IdAndMember(task.getHousehold().getId(), task.getCompletedBy())
-                    .orElseThrow(() -> new MembershipNotFoundException("Membership not found."));
-            membership.setScore(membership.getScore() - task.getPoints());
-        }
-        taskRepo.delete(task);
-    }
-
     private void checkMembership(Long householdId, String username) {
         boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
         if (!isMember) {
@@ -135,6 +166,11 @@ public class TaskService {
                 .stream()
                 .map(TaskResponse::fromEntity)
                 .toList();
+    }
+
+    public long getTasksToConfirmCount(String username) {
+        User user = userRepo.findByUsername(username).orElseThrow();
+        return taskRepo.getTasksToConfirmCount(user.getId());
     }
 
 

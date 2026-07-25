@@ -1,129 +1,97 @@
-.settings-container {
-    padding: 24px;
-    max-width: 600px;
-    margin: 0 auto;
+/* Container für den Header mit Zurück-Button */
+.settings-header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-.settings-card {
+.back-btn:hover {
+    background-color: var(--bg-toggle-container);
+    transform: scale(1.05);
+}
+
+/* Das Menü im Hub */
+.settings-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.settings-menu-btn {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
     border-radius: 16px;
-    padding: 24px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
     box-shadow: 0 2px 8px var(--shadow-light);
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
 }
 
-.settings-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.settings-menu-btn:hover {
+    border-color: var(--theme-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.settings-group label {
+.menu-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.menu-btn-content span {
     font-size: 16px;
     font-weight: 600;
     color: var(--text-primary);
 }
 
-.settings-hint {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin: 0;
+.menu-icon {
+    color: var(--theme-primary);
 }
 
-/* Flex-Anordnung für den Farbwähler und den Hex-Code Text */
-.color-picker-wrapper {
+/* =========================================
+   DAY SELECTOR (SCHEDULER)
+   ========================================= */
+.day-selector-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.day-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-top: 8px;
+    justify-content: center;
 }
 
-/* Hübscht den systemeigenen Color-Picker auf */
-.color-picker {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 48px;
-    height: 48px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+.day-btn:hover {
+    background-color: var(--bg-toggle-container);
 }
 
-/* Chrome/Safari Styling */
-.color-picker::-webkit-color-swatch {
-    border-radius: 12px;
-    border: 2px solid var(--border-color);
-}
-
-/* Firefox Styling */
-.color-picker::-moz-color-swatch {
-    border-radius: 12px;
-    border: 2px solid var(--border-color);
-}
-
-/* Die Anzeige für den #HEX Code */
-.color-hex {
-    font-family: monospace;
-    font-size: 16px;
-    color: var(--text-primary);
-    background-color: var(--bg-input);
-    padding: 10px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    letter-spacing: 1px;
-}
-
-/* Passt den Save-Button an, damit er nicht über die volle Breite geht */
-.save-btn {
-    align-self: flex-start;
-    margin-top: 8px;
-}
-
-/* Styling für das Text-Input (Household Name) */
-.settings-text-input {
-    padding: 12px 16px;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    font-size: 16px;
-    background-color: var(--bg-input);
-    color: var(--text-primary);
-    transition: all 0.2s ease;
-}
-
-.settings-text-input:focus {
-    outline: none;
+.day-btn.active {
+    background-color: var(--theme-primary);
+    color: white;
     border-color: var(--theme-primary);
-    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
+    transform: translateY(-2px);
 }
 
-/* Trennlinie zwischen globalen und persönlichen Einstellungen */
-.settings-divider {
-    border: none;
-    border-top: 1px solid var(--border-color);
-    margin: 8px 0;
-}
-
-/* Manuelles Textfeld für den Hex-Code */
-.color-hex-input {
-    font-family: monospace;
-    font-size: 16px;
-    color: var(--text-primary);
-    background-color: var(--bg-input);
-    padding: 10px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    letter-spacing: 1px;
-    width: 100px; /* Begrenzte Breite, da Hex-Codes kurz sind */
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-}
-
-.color-hex-input:focus {
-    outline: none;
-    border-color: var(--theme-primary);
+.edit-btn {
+    display: flex;
+    gap: 4px;
+    align-items: center;
 }

@@ -24,7 +24,7 @@ export default function UpdateNotification() {
             <div className="update-card">
                 <h2>🎉 New update</h2>
 
-                <p>Hier ist was sich geändert hat:</p>
+                <p>Hier ist, was sich geändert hat:</p>
 
                 <div className="update-feature">
                     <h3>Neuer Recent Button für mehr Optionalität:</h3>

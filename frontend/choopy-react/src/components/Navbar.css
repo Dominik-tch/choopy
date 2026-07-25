@@ -44,10 +44,10 @@
 }
 
 
-.navbar-item span {
+/* .navbar-item span {
     font-size: 22px;
     line-height: 1;
-}
+} */
 
 
 .navbar-item small {
@@ -76,8 +76,90 @@
     height: 24px;
 }
 
-/* @supports(padding: max(0px)) {
-    .navbar-container {
-        bottom: max(16px, env(safe-area-inset-bottom));
-    }
-} */
+/* =========================================
+   NAVBAR BADGES
+   ========================================= */
+
+.icon-with-badge {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-with-badge svg {
+    width: 24px;
+    height: 24px;
+}
+
+
+/* Base Badge */
+.badge {
+    position: absolute;
+
+    top: -6px;
+    right: -32px;
+
+    min-width: 22px;
+    height: 22px;
+
+    padding: 0 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 999px;
+
+    background-color: red;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+
+    border: 2px solid var(--bg-surface);
+
+    box-sizing: border-box;
+
+    transition: transform 0.2s ease;
+}
+
+
+/* Einzelne Ziffern: echter Kreis */
+.badge.single-digit {
+    width: 23px;
+    min-width: 22px;
+    padding: 0;
+    right: -21px;
+    border-radius: 50%;
+}
+
+
+/* 10-99: etwas größerer Kreis */
+.badge.double-digit {
+    /* widsth: 34px; */
+    min-width: 26px;
+    height: 22px;
+
+    padding: 0 7px;
+
+    border-radius: 999px;
+}
+
+
+/* 99+: Pille */
+.badge.max {
+    /* min-width: 25px; */
+    height: 22px;
+    right: -45px;
+    padding: 0 7px;
+
+    border-radius: 999px;
+}
+
+
+/* Optional: kleines Pop-Feedback */
+.badge:hover {
+    transform: scale(1.1);
+}

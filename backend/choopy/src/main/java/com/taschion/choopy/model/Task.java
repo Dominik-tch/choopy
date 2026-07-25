@@ -2,6 +2,7 @@ package com.taschion.choopy.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,10 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @CreationTimestamp
+    @Column(name = "creation_date", updatable = false)
+    private LocalDateTime creationDate;
+
     private String category;
     private String title;
     private String description;
@@ -29,7 +34,7 @@ public class Task {
     private Household household;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "creator_id")
     private User creator;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -43,4 +48,8 @@ public class Task {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "confirmed_by_id")
     private User confirmedBy;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "scheduled_task_id")
+    private ScheduledTask generatedBy;
 }

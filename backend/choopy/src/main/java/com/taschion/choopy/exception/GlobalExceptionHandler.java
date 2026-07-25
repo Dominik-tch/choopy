@@ -55,9 +55,12 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // 4. State Errors (e.g., "Task already completed" from TaskService)
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<Map<String, Object>> handleIllegalState(IllegalStateException ex) {
+    // 4. Bad Request Errors (State Errors or Invalid Arguments)
+    @ExceptionHandler({
+            IllegalStateException.class,
+            IllegalArgumentException.class
+    })
+    public ResponseEntity<Map<String, Object>> handleBadRequestExceptions(RuntimeException ex) {
         return new ResponseEntity<>(
                 buildErrorResponse(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage()),
                 HttpStatus.BAD_REQUEST
@@ -69,6 +72,7 @@ public class GlobalExceptionHandler {
             NoSuchElementException.class,
             TaskNotFoundException.class,
             MembershipNotFoundException.class,
+            ShoppingItemNotFoundException.class,
             UsernameNotFoundException.class
     })
     public ResponseEntity<Map<String, Object>> handleNotFoundExceptions(Exception ex) {

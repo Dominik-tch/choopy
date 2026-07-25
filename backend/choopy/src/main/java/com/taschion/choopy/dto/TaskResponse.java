@@ -1,5 +1,6 @@
 package com.taschion.choopy.dto;
 
+import com.taschion.choopy.model.ScheduledTask;
 import com.taschion.choopy.model.Task;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,8 @@ public record TaskResponse(
         UserResponse creator,
         UserResponse assignedTo,
         UserResponse completedBy,
-        UserResponse confirmedBy
+        UserResponse confirmedBy,
+        boolean generatedByScheduler
 ) {
     public static TaskResponse fromEntity(Task task) {
         return new TaskResponse(
@@ -31,7 +33,8 @@ public record TaskResponse(
                 UserResponse.fromEntity(task.getCreator()),
                 UserResponse.fromEntity(task.getAssignedTo()),
                 UserResponse.fromEntity(task.getCompletedBy()),
-                UserResponse.fromEntity(task.getConfirmedBy())
+                UserResponse.fromEntity(task.getConfirmedBy()),
+                task.getGeneratedBy() != null
         );
     }
 }

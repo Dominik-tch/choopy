@@ -4,6 +4,7 @@ import com.taschion.choopy.dto.TaskRequest;
 import com.taschion.choopy.dto.TaskResponse;
 import com.taschion.choopy.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,13 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request, Authentication authentication) {
         String username = authentication.getName();
-        return ResponseEntity.ok(taskService.createTask(request, username));
+        return ResponseEntity.status(HttpStatus.CREATED).body((taskService.createTask(request, username)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponse> updateTask(@RequestBody TaskRequest request, @PathVariable Long id, Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(taskService.updateTask(request, id, username));
     }
 
     @DeleteMapping("/{id}")
@@ -54,5 +61,11 @@ public class TaskController {
     public ResponseEntity<List<TaskResponse>> getTasksToConfirm(Authentication authentication) {
         String username = authentication.getName();
         return ResponseEntity.ok(taskService.getTasksToConfirm(username));
+    }
+
+    @GetMapping("/to-confirm/count")
+    public ResponseEntity<Long> getTasksToConfirmCount(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(taskService.getTasksToConfirmCount(username));
     }
 }

@@ -2,6 +2,8 @@ package com.taschion.choopy.service;
 
 import com.taschion.choopy.dto.ShoppingItemRequest;
 import com.taschion.choopy.dto.ShoppingItemResponse;
+import com.taschion.choopy.exception.MembershipNotFoundException;
+import com.taschion.choopy.exception.ShoppingItemNotFoundException;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.ShoppingItem;
 import com.taschion.choopy.model.User;
@@ -11,6 +13,7 @@ import com.taschion.choopy.repository.ShoppingItemRepository;
 import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +44,7 @@ public class ShoppingService {
         Household household = householdRepo.findById(request.householdId())
                 .orElseThrow(() -> new RuntimeException("Household not found"));
         User writer = userRepo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         ShoppingItem item = ShoppingItem.builder()
                 .content(request.content())
@@ -58,7 +61,7 @@ public class ShoppingService {
     @Transactional
     public void toggleItem(Long itemId, String username) {
         ShoppingItem item = shoppingRepo.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new ShoppingItemNotFoundException("Item not found"));
 
         checkMembership(item.getHousehold().getId(), username);
 
@@ -68,7 +71,7 @@ public class ShoppingService {
 
     public void deleteItem(Long itemId, String username) {
         ShoppingItem item = shoppingRepo.findById(itemId)
-                .orElseThrow(() -> new RuntimeException("Item not found"));
+                .orElseThrow(() -> new ShoppingItemNotFoundException("Item not found"));
 
         checkMembership(item.getHousehold().getId(), username);
 
@@ -78,7 +81,7 @@ public class ShoppingService {
     private void checkMembership(Long householdId, String username) {
         boolean isMember = houseMemberRepo.existsByHouseholdIdAndMemberUsername(householdId, username);
         if (!isMember) {
-            throw new AccessDeniedException("Access denied: You are not a member of this household!");
+            throw new MembershipNotFoundException("Access denied: You are not a member of this household!");
         }
     }
 }

@@ -50,6 +50,7 @@ export default function ConfirmView() {
         points={task.points}
         assignee={task.assignedTo && task.assignedTo.username}
         completedByUser={task.completedBy}
+        completionDate={task.completionDate}
         taskReload={loadConfirmTasks}
         confirm={true}/>
     });

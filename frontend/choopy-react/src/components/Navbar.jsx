@@ -21,7 +21,23 @@ export default function Navbar({ items, viewState, viewHandler, setHouseholdStat
                             }}
                         }
                     >
-                        <Icon />
+                        <div className="icon-with-badge">
+                            <Icon />
+                            {item.badge && (
+                                <span
+                                    className={
+                                        "badge " +
+                                        (item.badge < 10
+                                            ? "single-digit"
+                                            : item.badge < 100
+                                            ? "double-digit"
+                                            : "max")
+                                    }
+                                >
+                                    {item.badge > 99 ? "99+" : item.badge}
+                                </span>
+                            )}
+                        </div>
                         <small>{item.label}</small>
                     </button>
                 );

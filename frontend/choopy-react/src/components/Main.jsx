@@ -1,6 +1,7 @@
 import React from 'react';
 import { User, House, Home, CheckSquare, Settings, Users, ShoppingCart, BookCheck } from "lucide-react";
 import { darken } from "polished";
+import { apiFetch, extractErrorMessage } from '../utils';
 import Navbar from './Navbar';
 import ProfileView from './ProfileView';
 import HouseholdView from './HouseholdView';
@@ -15,6 +16,23 @@ export default function Main(props) {
     const [view, setView] = React.useState("house")
     const [householdView, setHouseholdView] = React.useState("tasks")
     const [themeColor, setThemeColor] = React.useState("#0cb954");
+    const [confirmCount, setConfirmCount] = React.useState(0);
+
+    React.useEffect(() => {
+        async function fetchConfirmCount() {
+            try {
+                const response = await apiFetch('/api/tasks/to-confirm/count');
+                if (response.ok) {
+                    const count = await response.json();
+                    setConfirmCount(count);
+                }
+            } catch (err) {
+                console.error("Failed to fetch confirm count", err);
+            }
+        }
+        
+        fetchConfirmCount();
+    }, [view, householdView, householdState]);
 
     React.useEffect(() => {
         document.documentElement.style.setProperty('--theme-primary', themeColor);
@@ -37,7 +55,8 @@ export default function Main(props) {
         {
             id: "confirmations",
             label: "Confirmations",
-            icon: BookCheck
+            icon: BookCheck,
+            badge: confirmCount > 0 ? confirmCount : null
         },
         {
             id: "profile",

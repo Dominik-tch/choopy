@@ -52,7 +52,7 @@ public class HouseholdService {
             throw new AccessDeniedException("Access denied: You are not a member of this household.");
         }
         if ("OPEN".equalsIgnoreCase(status)) {
-            return taskRepo.findByHouseholdIdAndCompletedByIsNull(householdId)
+            return taskRepo.findByHouseholdIdAndCompletedByIsNullOrderByCreationDateDesc(householdId)
                     .stream()
                     .map(TaskResponse::fromEntity)
                     .toList();

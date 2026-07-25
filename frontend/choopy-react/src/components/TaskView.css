@@ -15,8 +15,8 @@
 .task-header {
     display: flex;
     justify-content: space-between;
-    flex-direction: column;
-    align-items: center;
+    /* flex-direction: column; */
+    /* align-items: center; */
     margin-bottom: 32px;
     gap: 0px;
     flex-wrap: wrap; /* Ensures it doesn't break on very small mobile screens */
@@ -48,9 +48,6 @@
     align-items: center;
     justify-content: center;
     gap: 8px; /* Abstand zwischen Icon und Text */
-
-    padding: 8px 16px;
-    font-size: 14px;
 }
 
 .show-more-btn {
@@ -175,4 +172,64 @@ form {
     border-color: var(--theme-primary);
     transform: translateY(-2px);
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   CATEGORY FILTERS (SWIPEABLE)
+   ========================================= */
+.category-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 8px; /* Platz für den Schatten/Scrollbereich */
+    
+    /* Ermöglicht das horizontale Scrollen auf Mobile */
+    overflow-x: auto;
+    /* Verhindert, dass die Chips umbrechen */
+    white-space: nowrap;
+    
+    /* Sanftes Momentum-Scrolling auf iOS */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Versteckt den Scrollbalken für einen cleanen Look */
+.category-filters::-webkit-scrollbar {
+    display: none;
+}
+.category-filters {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.filter-chip {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0; 
+}
+
+.filter-chip:hover {
+    background-color: var(--bg-toggle-container);
+}
+
+.filter-chip.active {
+    background-color: var(--theme-primary);
+    color: white;
+    border-color: var(--theme-primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.no-tasks-msg {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    grid-column: 1 / -1;
+    margin-top: 20px;
 }

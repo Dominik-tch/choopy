@@ -12,6 +12,7 @@ export default function TaskView({ householdId }) {
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false)
     const [showMore, setShowMore] = useState(false)
+    const [selectedCategory, setSelectedCategory] = useState("All");
 
     const initialFormState = {
         title: "",
@@ -143,9 +144,15 @@ export default function TaskView({ householdId }) {
         <option key={member.id} value={member.username}>{member.username}</option>
     ));
 
-    let taskList = tasks.map((task) => (
-        <Task key={task.id} id={task.id} title={task.title} description={task.description} category={task.category}
-            duration={task.duration} points={task.points} assignee={task.assignedTo && task.assignedTo.username} taskReload={loadTasks} />
+    const availableCategories = ["All", ...new Set(tasks.map(t => t.category).filter(Boolean))];
+
+    const filteredTasks = selectedCategory === "All" ? tasks : tasks.filter(task => task.category === selectedCategory);
+
+    let taskList = filteredTasks.map((task) => (
+        <Task key={task.id} id={task.id} title={task.title} description={task.description}
+            category={task.category} duration={task.duration} points={task.points}
+            assignee={task.assignedTo && task.assignedTo.username} taskReload={loadTasks}
+            generatedByScheduler={task.generatedByScheduler}/>
     ));
     
     let maxSuggestions = showMore ? 50 : 10;
@@ -240,6 +247,19 @@ export default function TaskView({ householdId }) {
                     </button>
                 </form>
             </section>}
+
+            <div className="category-filters">
+                {availableCategories.map(category => (
+                    <button 
+                        key={category}
+                        type="button"
+                        className={`filter-chip ${selectedCategory === category ? "active" : ""}`}
+                        onClick={() => setSelectedCategory(category)}
+                    >
+                        {category}
+                    </button>
+                ))}
+            </div>
 
             <section className="task-cards">
                 {taskList}

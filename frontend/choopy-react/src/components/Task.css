@@ -1,3 +1,6 @@
+/* =========================================
+   TASK CARD BASE
+   ========================================= */
 .task-card {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-color);
@@ -16,11 +19,32 @@
     box-shadow: 0 10px 15px -3px var(--shadow-medium);
 }
 
+.task-card.editing {
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+}
+
+/* =========================================
+   HEADER BEREICH (Titel, Kategorie, Edit-Button)
+   ========================================= */
 .task-card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 12px;
+    margin-bottom: 8px; /* Gibt dem Edit-Feld etwas Luft nach unten */
+}
+
+.header-title-area {
+    flex: 1;
+    min-width: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
 .task-title {
@@ -40,6 +64,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: inline-block;
 }
 
 .task-description {
@@ -47,34 +72,39 @@
     font-size: 14px;
     color: var(--text-muted);
     line-height: 1.5;
+    margin-bottom: 8px;
 }
 
+/* =========================================
+   META BADGES (Timer, Sterne)
+   ========================================= */
 .task-meta-container {
     display: flex;
-    gap: 12px;
+    gap: 5px;
     flex-wrap: wrap;
+    margin-top: 4px;
 }
 
 .task-meta-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     background-color: var(--bg-input);
-    padding: 6px 12px;
+    padding: 4px 10px;
     border-radius: 8px;
     font-size: 13px;
     font-weight: 600;
-    color: var(--primary-text);
+    color: var(--text-primary); /* Vorher var(--primary-text), gefixt! */
 }
 
-/* .points-badge {
-    color: var(--theme-primary);
-    background-color: rgba(13, 148, 136, 0.1);
-} */
+/* Hilfsklasse für die Icons in den Badges */
+.meta-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+}
 
-/* .meta-icon {
-    font-size: 14px;
-} */
 .meta-icon-check {
     font-size: 16px;
     color: var(--theme-primary);
@@ -86,13 +116,16 @@
     color: var(--theme-primary);
 }
 
+/* =========================================
+   FOOTER (Assignees & Buttons)
+   ========================================= */
 .task-card-footer {
     display: flex;
     justify-content: space-between;
     justify-items: center;
     align-items: center;
-    margin-top: 4px;
-    padding-top: 5px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid var(--border-color);
 }
 
@@ -115,11 +148,17 @@
     color: var(--text-primary);
 }
 
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px; 
+}
+
 .complete-btn {
     padding: 8px 16px;
     font-size: 14px;
-    /* Optional: make the button slightly smaller than standard forms */
     width: auto; 
+    margin: 0 !important; 
 }
 
 .reject-btn {
@@ -127,6 +166,7 @@
     font-size: 14px;
     background-color: #ef4444;
     width: auto; 
+    margin: 0 !important; 
 }
 
 .confirm-warning {
@@ -134,41 +174,20 @@
     color: #ef4444;
 }
 
-/* =========================================
-   TASK ACTIONS (Footer Buttons)
-   ========================================= */
-.task-actions {
-    display: flex;
-    align-items: center;
-    gap: 4px; 
-}
-
-/* Setzt störende Standard-Abstände bei BEIDEN Buttons zurück */
-.complete-btn, .delete-btn, .reject-btn {
-    margin: 0 !important; 
-}
-
-/* Der Mülleimer-Button */
 .delete-btn {
     background: transparent;
     border: none;
     color: var(--text-muted);
-    
-    /* Feste Maße helfen oft bei der perfekten Zentrierung von Icons */
     height: 36px;
     width: 36px;
     padding: 0;
-    
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    
-    /* Falls er OPTISCH immer noch 1-2 Pixel zu hoch wirkt, 
-       kannst du ihn hiermit leicht nach unten schubsen: */
-    /* transform: translateY(1px); */
+    margin: 0 !important; 
 }
 
 .delete-btn:hover {
@@ -179,4 +198,94 @@
 .delete-btn:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4);
+}
+
+/* =========================================
+   INLINE EDIT MODUS
+   ========================================= */
+.icon-edit-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    flex-shrink: 0; 
+}
+
+.icon-edit-btn:hover {
+    color: var(--theme-primary);
+    background-color: var(--bg-toggle-container);
+}
+
+.inline-edit-input {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--theme-primary);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: inherit;
+    padding: 8px 12px;
+    box-sizing: border-box; /* Verhindert das Herausragen am Rand */
+    transition: box-shadow 0.2s ease;
+}
+
+.inline-edit-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2);
+}
+
+.title-input {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.category-select {
+    font-size: 12px;
+    padding: 4px 8px;
+    width: max-content;
+    font-weight: 600;
+}
+
+.desc-input {
+    min-height: 60px;
+    resize: vertical;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.inline-edit-number {
+    width: 65px;
+    background-color: var(--bg-input);
+    border: 1px solid var(--theme-primary);
+    border-radius: 6px;
+    color: var(--text-primary);
+    padding: 4px 8px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 600;
+    box-sizing: border-box;
+    transition: box-shadow 0.2s ease;
+}
+
+.inline-edit-number:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2);
+}
+
+.task-edit-footer {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border-color);
+    display: flex;
+    justify-content: center;
+}
+
+.task-edit-footer .save-btn {
+    width: 100%;
 }
