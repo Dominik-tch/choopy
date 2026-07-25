@@ -12,6 +12,7 @@ import com.taschion.choopy.repository.HouseholdRepository;
 import com.taschion.choopy.repository.ShoppingItemRepository;
 import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,15 @@ public class ShoppingService {
 
         ShoppingItem savedItem = shoppingRepo.save(item);
         return ShoppingItemResponse.fromEntity(savedItem);
+    }
+
+    @Transactional
+    public ShoppingItemResponse updateItem(ShoppingItemRequest request, Long itemId, String username) {
+        checkMembership(request.householdId(), username);
+        ShoppingItem item = shoppingRepo.findById(itemId)
+                .orElseThrow(() -> new ShoppingItemNotFoundException("Item not found"));
+        item.setContent(request.content());
+        return ShoppingItemResponse.fromEntity(item);
     }
 
     @Transactional

@@ -22,6 +22,11 @@ public class ShoppingController {
         return ResponseEntity.ok(shoppingService.getItemsForHousehold(householdId, authentication.getName()));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ShoppingItemResponse> updateItem(@RequestBody ShoppingItemRequest request, @PathVariable Long id, Authentication authentication) {
+        return ResponseEntity.ok(shoppingService.updateItem(request, id, authentication.getName()));
+    }
+
     @PostMapping
     public ResponseEntity<ShoppingItemResponse> createItem(@RequestBody ShoppingItemRequest request, Authentication authentication) {
         return ResponseEntity.ok(shoppingService.createItem(request, authentication.getName()));
