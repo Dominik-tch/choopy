@@ -43,6 +43,7 @@
 
 .update-feature {
     margin-top: 24px;
+    border-top: 3px solid var(--border-color);
 }
 
 .update-feature h3 {
@@ -52,8 +53,8 @@
 }
 
 .update-feature img {
-    width: 70%;
-    max-width: 280px;
+    width: 90%;
+    max-width: 400px;
 
     display: block;
     margin: 0 auto 12px;

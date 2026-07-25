@@ -8,10 +8,7 @@ import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
 import com.taschion.choopy.model.Task;
 import com.taschion.choopy.model.User;
-import com.taschion.choopy.repository.HouseholdMembershipRepository;
-import com.taschion.choopy.repository.HouseholdRepository;
-import com.taschion.choopy.repository.TaskRepository;
-import com.taschion.choopy.repository.UserRepository;
+import com.taschion.choopy.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,9 +26,13 @@ public class TaskService {
     private final UserRepository userRepo;
     private final HouseholdRepository householdRepo;
     private final HouseholdMembershipRepository houseMemberRepo;
+    private final ScheduledTaskRepository scheduledTaskRepo;
 
     public TaskResponse createTask(TaskRequest request, String username) {
         checkMembership(request.householdId(), username);
+        if (scheduledTaskRepo.existsByTitleAndHouseholdId(request.title(), request.householdId())) {
+            throw new IllegalArgumentException("A scheduled task with this title already exists.");
+        }
         Household household = householdRepo.findById(request.householdId())
                 .orElseThrow(() -> new RuntimeException("Household not found"));
         User creator = userRepo.findByUsername(username)
@@ -60,7 +61,9 @@ public class TaskService {
     public TaskResponse updateTask(TaskRequest request, Long taskId, String username) {
         Task task = taskRepo.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException("Task with ID " + taskId + " not found."));
-
+        if (scheduledTaskRepo.existsByTitleAndHouseholdId(request.title(), task.getHousehold().getId())) {
+            throw new IllegalArgumentException("A scheduled task with this title already exists.");
+        }
         checkMembership(task.getHousehold().getId(), username);
 
         if (task.getCompletedBy() != null) {
