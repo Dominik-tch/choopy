@@ -52,7 +52,8 @@ export default function ConfirmView() {
         completedByUser={task.completedBy}
         completionDate={task.completionDate}
         taskReload={loadConfirmTasks}
-        confirm={true}/>
+        confirm={true}
+        generatedByScheduler={task.generatedByScheduler}/>
     });
 
     return (

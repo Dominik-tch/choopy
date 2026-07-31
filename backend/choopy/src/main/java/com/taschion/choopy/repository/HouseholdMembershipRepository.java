@@ -42,4 +42,6 @@ public interface HouseholdMembershipRepository extends JpaRepository<HouseholdMe
         List<MemberResponse> findMemberResponsesByHouseholdId(@Param("householdId") Long householdId);
 
     Optional<HouseholdMembership> findByHousehold_IdAndMember(Long householdId, User member);
+
+    List<HouseholdMembership> findByHouseholdId(Long householdId);
 }

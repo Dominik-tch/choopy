@@ -77,4 +77,19 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("duration") Integer duration,
             @Param("points") Integer points
     );
+
+    @Query("""
+        SELECT COUNT(t) > 0 
+        FROM Task t 
+        WHERE t.title = :title 
+          AND t.household.id = :householdId 
+          AND (t.generatedBy IS NULL OR t.generatedBy.id <> :schedulerId)
+    """)
+    boolean existsConflictingTaskByTitle(
+            @Param("title") String title,
+            @Param("householdId") Long householdId,
+            @Param("schedulerId") Long schedulerId
+    );
+
+    List<Task> findByHouseholdIdAndCompletedById(Long householdId, Long id);
 }

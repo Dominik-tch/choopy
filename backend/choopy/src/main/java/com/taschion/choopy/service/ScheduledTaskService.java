@@ -23,6 +23,7 @@ public class ScheduledTaskService {
     private final HouseholdRepository householdRepo;
     private final HouseholdMembershipRepository membershipRepo;
     private final TaskRepository taskRepo;
+    private final HouseholdMembershipService householdMembershipService;
 
     public ScheduledTaskResponse createScheduledTask(ScheduledTaskRequest request, String username) {
         verifyMembership(request.householdId(), username);
@@ -64,13 +65,15 @@ public class ScheduledTaskService {
     public ScheduledTaskResponse updateScheduledTask(Long id, ScheduledTaskRequest request, String username) {
         ScheduledTask scheduledTask = scheduledTaskRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Scheduled Task not found"));
-        if (taskRepo.existsByTitleAndHouseholdId(request.title(), request.householdId())) {
-            throw new IllegalArgumentException("A task with this title already exists.");
-        }
-        if (scheduledTaskRepo.existsByTitleAndHouseholdId(request.title(), request.householdId())) {
+        verifyMembership(scheduledTask.getHousehold().getId(), username);
+
+        if (scheduledTaskRepo.existsByTitleAndHouseholdIdAndIdNot(request.title(), request.householdId(), id)) {
             throw new IllegalArgumentException("A scheduled task with this title already exists.");
         }
-        verifyMembership(scheduledTask.getHousehold().getId(), username);
+
+        if (taskRepo.existsConflictingTaskByTitle(request.title(), request.householdId(), id)) {
+            throw new IllegalArgumentException("A task with this title already exists.");
+        }
 
         scheduledTask.setTitle(request.title());
         scheduledTask.setDescription(request.description());
@@ -89,6 +92,8 @@ public class ScheduledTaskService {
                 request.duration(),
                 request.points()
         );
+
+        householdMembershipService.recalculateScores(request.householdId());
 
         return ScheduledTaskResponse.fromEntity(updated);
     }

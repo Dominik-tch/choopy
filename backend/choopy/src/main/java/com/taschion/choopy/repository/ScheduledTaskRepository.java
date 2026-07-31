@@ -8,4 +8,5 @@ import java.util.List;
 public interface ScheduledTaskRepository extends JpaRepository<ScheduledTask, Long> {
     List<ScheduledTask> findByHouseholdId(Long householdId);
     boolean existsByTitleAndHouseholdId(String title, Long householdId);
+    boolean existsByTitleAndHouseholdIdAndIdNot(String title, Long householdId, Long id);
 }

@@ -80,9 +80,11 @@ export default function MemberView({ householdId }) {
         }
     }
 
-    async function loadHistoryView(memberId, memberName) {
+    async function loadHistoryView(memberId, memberName, isReload = false) {
         setHistoryMemberName(memberName)
-        window.history.pushState({ HistoryViewOpen: true }, '');
+        if (!isReload) {
+            window.history.pushState({ HistoryViewOpen: true }, '');
+        }
 
         const params = new URLSearchParams({ status: "COMPLETED", completedByUserId: memberId });
         try {
@@ -136,6 +138,7 @@ export default function MemberView({ householdId }) {
             loadHistoryView={loadHistoryView}
             completedByUser={task.completedBy}
             confirmedByUser={task.confirmedBy}
+            generatedByScheduler={task.generatedByScheduler}
         />
     ));
 

@@ -70,7 +70,11 @@ export default function Task(props) {
             if (response.ok) {
                 toast.success("Task updated successfully!");
                 setIsEditing(false);
-                props.taskReload();
+                if (props.taskReload) {
+                    props.taskReload();
+                } else if (props.loadHistoryView && props.completedByUser) {
+                    props.loadHistoryView(props.completedByUser.id, props.completedByUser.username, true);
+                }
             } else {
                 const backendError = await extractErrorMessage(response, "Update failed.");
                 toast.error(backendError);
@@ -81,7 +85,7 @@ export default function Task(props) {
     }
 
     async function confirmTask() {
-        if (!window.confirm("Are you sure you want to confirm this task?")) return;
+        //if (!window.confirm("Are you sure you want to confirm this task?")) return;
         try {
             const response = await apiFetch(`/api/tasks/${props.id}/confirm`, { method: 'PATCH' });
             if (response.ok) {
@@ -135,8 +139,11 @@ export default function Task(props) {
             const response = await apiFetch(`/api/tasks/${props.id}`, { method: 'DELETE' });
             if (response.ok) {
                 toast.success("Task deleted.", { id: toastId });
-                if (props.taskReload) props.taskReload();
-                if (props.loadHistoryView) props.loadHistoryView(props.completedByUser.id, props.completedByUser.username);
+                if (props.taskReload) {
+                    props.taskReload();
+                } else if (props.loadHistoryView && props.completedByUser) {
+                    props.loadHistoryView(props.completedByUser.id, props.completedByUser.username, true);
+                }
             } else {
                 const backendError = await extractErrorMessage(response, "Deleting failed.");
                 toast.error(backendError, { id: toastId });

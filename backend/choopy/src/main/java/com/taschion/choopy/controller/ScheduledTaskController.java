@@ -40,8 +40,9 @@ public class ScheduledTaskController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteScheduledTask(@PathVariable Long id, Authentication authentication) {
-        String username = authentication.getName();
-        scheduledTaskService.deleteScheduledTask(id, username);
-        return ResponseEntity.noContent().build();
+        throw new IllegalStateException("For safety reasons, deletion of scheduled tasks is currently not supported.");
+//        String username = authentication.getName();
+//        scheduledTaskService.deleteScheduledTask(id, username);
+//        return ResponseEntity.noContent().build();
     }
 }

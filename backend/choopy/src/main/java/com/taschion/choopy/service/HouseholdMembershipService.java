@@ -3,9 +3,11 @@ package com.taschion.choopy.service;
 import com.taschion.choopy.dto.*;
 import com.taschion.choopy.model.Household;
 import com.taschion.choopy.model.HouseholdMembership;
+import com.taschion.choopy.model.Task;
 import com.taschion.choopy.model.User;
 import com.taschion.choopy.repository.HouseholdMembershipRepository;
 import com.taschion.choopy.repository.HouseholdRepository;
+import com.taschion.choopy.repository.TaskRepository;
 import com.taschion.choopy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class HouseholdMembershipService {
     private final HouseholdMembershipRepository houseMemberRepo;
     private final HouseholdRepository householdRepo;
     private final UserRepository userRepo;
+    private final TaskRepository taskRepo;
 
     public void createMembership(Household household, User member, String role) {
         HouseholdMembership membership = HouseholdMembership.builder()
@@ -60,5 +63,19 @@ public class HouseholdMembershipService {
         Household household = householdRepo.findById(id).orElseThrow();
         HouseholdMembership memberShip = houseMemberRepo.findByHousehold_IdAndMember(id, userRepo.findByUsername(username).orElseThrow()).orElseThrow();
         return new PreferenceResponse(household.getName(), memberShip.getColor());
+    }
+
+    @Transactional
+    public void recalculateScores(Long householdId) {
+        List<HouseholdMembership> memberships = houseMemberRepo.findByHouseholdId(householdId);
+
+        for (HouseholdMembership membership : memberships) {
+            List<Task> completedTasks = taskRepo.findByHouseholdIdAndCompletedById(householdId, membership.getMember().getId());
+
+            int totalScore = completedTasks.stream().mapToInt(Task::getPoints).sum();
+
+            membership.setScore(totalScore);
+        }
+        houseMemberRepo.saveAll(memberships);
     }
 }
